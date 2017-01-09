@@ -74,6 +74,7 @@ const updatePackageJSON = async() => {
         return {
             name: project.name,
             version: `0.0.0`,
+            gtScaffoldVersion: version,
             description,
             main,
             scripts,
