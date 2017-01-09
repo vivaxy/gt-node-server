@@ -25,7 +25,7 @@ Steps to make contributions
 
 # gt-node-server
 
-node server gt scaffold
+Node server initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)
 
 ## FEATURE
 
