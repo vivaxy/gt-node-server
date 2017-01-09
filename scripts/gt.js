@@ -54,7 +54,7 @@ const updatePackageJSON = async() => {
             version,
             description,
             main,
-            scripts,
+            scripts: scaffoldScripts,
             repository,
             keywords,
             author,
@@ -67,9 +67,15 @@ const updatePackageJSON = async() => {
         } = data;
 
         const {
-            listr: _, // remove
+            listr: _0, // remove
+            [`standard-version`]: _2,
             devDependencies,
         } = scaffoldDevDependencies;
+
+        const {
+            release: _3, // remove
+            scripts,
+        } = scaffoldScripts;
 
         return {
             name: project.name,

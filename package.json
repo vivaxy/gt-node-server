@@ -4,6 +4,7 @@
   "description": "node server gt scaffold",
   "main": "index.js",
   "scripts": {
+    "release": "standard-version && git push --tag",
     "start": "pm2 start index.js",
     "dev": "nodemon index.js"
   },
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "listr": "^0.9.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "standard-version": "^4.0.0"
   }
 }
