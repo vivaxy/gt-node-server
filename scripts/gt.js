@@ -69,12 +69,12 @@ const updatePackageJSON = async() => {
         const {
             listr: _0, // remove
             [`standard-version`]: _2,
-            devDependencies,
+            ...devDependencies,
         } = scaffoldDevDependencies;
 
         const {
             release: _3, // remove
-            scripts,
+            ...scripts,
         } = scaffoldScripts;
 
         return {
