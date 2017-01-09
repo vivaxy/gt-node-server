@@ -36,4 +36,8 @@ node server gt scaffold
 ## DEVELOP
 
 - `npm start`
-- open in browser `http://0.0.0.0:${port}`
+- open in browser `http://127.0.0.1:8080`
+
+## DEPLOY
+
+- `npm start`

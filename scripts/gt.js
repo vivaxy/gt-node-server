@@ -62,9 +62,14 @@ const updatePackageJSON = async() => {
             bugs,
             homepage,
             dependencies,
-            devDependencies,
+            devDependencies: scaffoldDevDependencies,
             peerDependencies,
         } = data;
+
+        const {
+            listr: _, // remove
+            devDependencies,
+        } = scaffoldDevDependencies;
 
         return {
             name: project.name,

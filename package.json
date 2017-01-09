@@ -4,7 +4,8 @@
   "description": "node server gt scaffold",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start index.js"
+    "start": "pm2 start index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "log4js": "^1.1.0"
   },
   "devDependencies": {
-    "listr": "^0.9.0"
+    "listr": "^0.9.0",
+    "nodemon": "^1.11.0"
   }
 }
