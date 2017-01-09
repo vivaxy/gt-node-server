@@ -105,7 +105,7 @@ const updateREADME = async() => {
 
     await sleep(1000);
     await presets.updateFile(filename, (data) => {
-        const projectData = data.split(`----------`)[1];
+        const projectData = data.split(`----------\n\n`)[1];
         return projectData.replace(/gt-node-server/g, project.name);
     });
 
