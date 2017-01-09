@@ -35,7 +35,7 @@ Node server initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-
 
 ## DEVELOP
 
-- `npm start`
+- `npm run dev`
 - open in browser `http://127.0.0.1:8080`
 
 ## DEPLOY
