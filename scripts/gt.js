@@ -117,7 +117,7 @@ const updateREADME = async() => {
     await sleep(1000);
     await presets.updateFile(filename, (data) => {
         const projectData = data.split(`----------\n\n`)[1];
-        return projectData.replace(/gt-node-server/g, `project.name
+        return projectData.replace(/gt-node-server/g, `${project.name}
 
 Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)`);
     });
