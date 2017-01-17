@@ -4,7 +4,7 @@
   "description": "node server gt scaffold",
   "main": "index.js",
   "scripts": {
-    "release": "standard-version && git push --tag",
+    "release": "standard-version && git push --follow-tags",
     "start": "pm2 start index.js",
     "dev": "nodemon index.js"
   },
