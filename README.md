@@ -18,7 +18,7 @@ Steps to make contributions
 
 - update codes
 - submit your changes by [`gacp`](https://github.com/vivaxy/gacp)
-- run `npm run release` to update `CHANGELOG.md` and bump version
+- run `yarn run release` to update `CHANGELOG.md` and bump version
 - run [`gacp`](https://github.com/vivaxy/gacp) to push changes into origin
 
 ----------
@@ -35,9 +35,9 @@ node server
 
 ## DEVELOP
 
-- `npm run dev`
+- `yarn run dev`
 - open in browser `http://127.0.0.1:8080`
 
 ## DEPLOY
 
-- `npm start`
+- `yarn start`
