@@ -41,3 +41,5 @@ node server
 ## DEPLOY
 
 - `yarn start`
+- `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"`
+`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"}}}`

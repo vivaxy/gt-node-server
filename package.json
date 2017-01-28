@@ -32,6 +32,8 @@
     "babel-preset-stage-0": "^6.16.0",
     "fs-extra": "^1.0.0",
     "koa": "^2.0.0-alpha.7",
+    "koa-body": "2",
+    "koa-router": "next",
     "log4js": "^1.1.0"
   },
   "devDependencies": {

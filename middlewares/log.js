@@ -5,15 +5,20 @@
 
 import logger from '../lib/logger';
 
+const getTimeStamp = () => {
+    return new Date().getTime();
+};
+
 export default async(ctx, next) => {
 
     const request = ctx.request;
-    const response = ctx.response;
 
-    logger.info(`request.path: ${request.path}`);
+    const startTime = getTimeStamp();
+
     try {
         await next();
     } catch (ex) {
         logger.error(ex);
     }
+    logger.info(`[${request.method}] ${request.path} in ${getTimeStamp() - startTime}ms`);
 }
