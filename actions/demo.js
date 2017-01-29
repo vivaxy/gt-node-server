@@ -1,5 +1,5 @@
 /**
- * @since 2017-01-28 19:25
+ * @since 2017-01-29 11:07
  * @author vivaxy
  */
 
@@ -8,3 +8,5 @@ export default async(ctx, next) => {
         code: 0
     };
 };
+
+export const methods = ['get', 'post'];

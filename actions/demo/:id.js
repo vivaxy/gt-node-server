@@ -13,3 +13,5 @@ export default async(ctx, next) => {
         }
     };
 };
+
+export const methods = ['get', 'post'];
