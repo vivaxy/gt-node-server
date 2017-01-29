@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/vivaxy/gt-node-server/compare/v0.1.0...v0.2.0) (2017-01-29)
+
+
+### Bug Fixes
+
+* **yarn:** :bug:Fix yarn.lock resolved urls to public registry; Use .npmrc to maintain npm registry; ([9b3ac9b](https://github.com/vivaxy/gt-node-server/commit/9b3ac9b))
+
+
+### Features
+
+* **router:** :sparkles:Add koa-router; Add koa-body for body-parser, enabled multipart; ([a3003cd](https://github.com/vivaxy/gt-node-server/commit/a3003cd))
+* **router:** :sparkles:More sophisticated way of getting router config ([22b5ad3](https://github.com/vivaxy/gt-node-server/commit/22b5ad3))
+
+
+
 <a name="0.1.0"></a>
 # 0.1.0 (2017-01-17)
 
