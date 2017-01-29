@@ -26,6 +26,7 @@ const copyFiles = async() => {
         `.babelrc`,
         `.editorconfig`,
         `.gitignore`,
+        `.npmrc`,
         `index.js`,
         `LICENSE`,
     ];
