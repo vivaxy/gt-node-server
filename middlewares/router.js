@@ -49,7 +49,7 @@ const addActionsIntoRouter = () => {
             methods,
         } = getConfigFromFile(configPath);
         methods.forEach((method) => {
-            logger.debug(`[${method}] ${routerPath}`);
+            logger.debug(`[mount router] ${method}: ${routerPath}`);
             router[method](routerPath, middleware);
         });
     });

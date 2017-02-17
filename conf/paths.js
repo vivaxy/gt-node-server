@@ -5,6 +5,5 @@
 
 import path from 'path';
 
-import pkg from '../package.json';
-
-export const log = path.join(`${process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE}`, `${pkg.name}-logs`);
+export const projectBase = path.join(__dirname, '..');
+export const log = path.join(projectBase, 'logs');
