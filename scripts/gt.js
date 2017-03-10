@@ -20,15 +20,15 @@ const copyFiles = async() => {
     } = data;
 
     const files = [
-        `conf`,
-        `lib`,
-        `middlewares`,
-        `.babelrc`,
-        `.editorconfig`,
-        `.gitignore`,
-        `.npmrc`,
-        `index.js`,
-        `LICENSE`,
+        'conf',
+        'lib',
+        'middlewares',
+        '.editorconfig',
+        '.gitignore',
+        '.npmrc',
+        'index.js',
+        'LICENSE',
+        'yarn.lock',
     ];
 
     await sleep(1000);
@@ -39,13 +39,12 @@ const updatePackageJSON = async() => {
 
     const {
         project,
-        scaffold,
         presets,
     } = data;
 
     const projectGit = project.git || {};
 
-    const filename = `package.json`;
+    const filename = 'package.json';
 
     await sleep(1000);
     await presets.updateJson(filename, (data) => {
@@ -69,26 +68,24 @@ const updatePackageJSON = async() => {
 
         Reflect.deleteProperty(devDependencies, 'listr');
         Reflect.deleteProperty(devDependencies, 'standard-version');
-        Reflect.deleteProperty(scaffoldScripts, 'release');
+        Reflect.deleteProperty(scripts, 'release');
 
         return {
             name: project.name,
-            version: `0.0.0`,
+            version: '0.0.0',
             gtScaffoldVersion: version,
             description,
             main,
             scripts,
-            repository: {
-                ...repository,
+            repository: Object.assign(repository, {
                 url: projectGit.repositoryURL,
-            },
+            }),
             keywords,
             author,
             license,
-            bugs: {
-                ...bugs,
+            bugs: Object.assign(bugs, {
                 url: undefined,
-            },
+            }),
             dependencies,
             devDependencies,
             peerDependencies,
@@ -102,20 +99,32 @@ const updateREADME = async() => {
 
     const {
         project,
-        scaffold,
         presets,
     } = data;
 
-    const filename = `README.md`;
+    const filename = 'README.md';
 
     await sleep(1000);
     await presets.updateFile(filename, (data) => {
-        const projectData = data.split(`----------\n\n`)[1];
+        const projectData = data.split('----------\n\n')[1];
         return projectData.replace(/gt-node-server/g, `${project.name}
 
 Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)`);
     });
 
+};
+
+const updateCHANGELOG = async() => {
+    const {
+        presets,
+    } = data;
+
+    const filename = 'CHANGELOG.md';
+
+    await sleep(1000);
+    await presets.updateFile(filename, () => {
+        return '';
+    });
 };
 
 exports.init = async(options) => {
@@ -124,17 +133,21 @@ exports.init = async(options) => {
 
     return new Listr([
         {
-            title: `copy files`,
+            title: 'copy files',
             task: copyFiles,
         },
         {
-            title: `update package.json`,
+            title: 'update package.json',
             task: updatePackageJSON,
         },
         {
-            title: `update README.md`,
+            title: 'update README.md',
             task: updateREADME,
         },
+        {
+            title: 'update CHANGELOG.md',
+            task: updateCHANGELOG,
+        }
     ]);
 
 };
