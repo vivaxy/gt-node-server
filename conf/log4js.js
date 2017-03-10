@@ -3,12 +3,12 @@
  * @author vivaxy
  */
 
-import path from 'path';
-import log4js from 'log4js';
+const path = require('path');
+const log4js = require('log4js');
 
-import { log } from './paths';
+const {log} = require('./paths');
 
-export const logFile = path.join(log, `default.log`);
+const logFile = path.join(log, `default.log`);
 
 /**
  * log levels
@@ -23,7 +23,8 @@ export const logFile = path.join(log, `default.log`);
  * MARK: new Level(9007199254740992, "MARK"), // 2^53
  * OFF: new Level(Number.MAX_VALUE, "OFF"),
  */
-export default {
+module.exports = {
+    logFile,
     appenders: [
         {
             type: 'console',

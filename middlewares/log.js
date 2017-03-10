@@ -3,14 +3,13 @@
  * @author vivaxy
  */
 
-import logger from '../lib/logger';
+const logger = require('../lib/logger');
 
 const getTimeStamp = () => {
     return new Date().getTime();
 };
 
-export default async(ctx, next) => {
-
+module.exports = async(ctx, next) => {
     const request = ctx.request;
 
     const startTime = getTimeStamp();
@@ -21,4 +20,4 @@ export default async(ctx, next) => {
         logger.error(ex);
     }
     logger.info(`[${request.method}] ${request.path} in ${getTimeStamp() - startTime}ms`);
-}
+};

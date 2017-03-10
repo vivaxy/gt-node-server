@@ -3,10 +3,15 @@
  * @author vivaxy
  */
 
-export default async(ctx, next) => {
+const action = async(ctx, next) => {
     ctx.body = {
         code: 0
     };
 };
 
-export const methods = ['get', 'post'];
+const methods = ['get', 'post'];
+
+module.exports = {
+    action,
+    methods,
+};

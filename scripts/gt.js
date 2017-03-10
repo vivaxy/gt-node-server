@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import Listr from 'listr';
+const Listr = require('listr');
 
 const sleep = (timeout) => {
     return new Promise((resolve) => {
@@ -125,7 +125,7 @@ Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)
 
 };
 
-export const init = async(options) => {
+exports.init = async(options) => {
 
     data = options;
 
@@ -146,7 +146,7 @@ export const init = async(options) => {
 
 };
 
-export const after = async() => {
+exports.after = async() => {
     console.log(`
     please exec following command to initialize your project
 

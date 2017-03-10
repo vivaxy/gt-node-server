@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-export default async(ctx, next) => {
+const action = async(ctx, next) => {
     ctx.body = {
         code: 0,
         data: {
@@ -14,4 +14,9 @@ export default async(ctx, next) => {
     };
 };
 
-export const methods = ['get', 'post'];
+const methods = ['get', 'post'];
+
+module.exports = {
+    action,
+    methods,
+};

@@ -3,11 +3,11 @@
  * @author vivaxy
  */
 
-import path from 'path';
-import glob from 'glob';
-import Router from 'koa-router';
+const path = require('path');
+const glob = require('glob');
+const Router = require('koa-router');
 
-import logger from '../lib/logger';
+const logger = require('../lib/logger');
 
 const router = new Router();
 
@@ -22,7 +22,7 @@ const getActionFiles = () => {
 const getConfigFromFile = (configPath) => {
     const configs = require(`${relativeActionBase}/${configPath}`);
     const routerPath = `/${configPath}`;
-    const middleware = configs.default;
+    const middleware = configs.action;
     const methods = configs.methods || ['get'];
     return {
         routerPath: routerPath,
@@ -57,4 +57,4 @@ const addActionsIntoRouter = () => {
 
 addActionsIntoRouter();
 
-export default router;
+module.exports = router;

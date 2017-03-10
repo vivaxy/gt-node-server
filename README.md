@@ -29,9 +29,9 @@ node server
 
 ## FEATURE
 
-- es6 es7 support
 - log4js as logger
 - pm2 process manage
+- tested in nodejs v7.7.2
 
 ## DEVELOP
 
