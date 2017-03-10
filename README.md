@@ -31,7 +31,7 @@ node server
 
 - log4js as logger
 - pm2 process manage
-- tested in nodejs v7.7.2
+- support in nodejs > v6.10.0
 
 ## DEVELOP
 
