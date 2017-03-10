@@ -156,7 +156,7 @@ exports.after = async() => {
     console.log(`
     please exec following command to initialize your project
 
-    - npm install
+    - yarn install
 
     then exec following command to start server
 
