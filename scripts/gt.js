@@ -158,8 +158,8 @@ exports.after = async() => {
 
     - yarn install
 
-    then exec following command to start server
+    then exec following command to start dev server
 
-    - npm start
+    - yarn run dev
 `);
 };
