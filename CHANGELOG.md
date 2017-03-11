@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/vivaxy/gt-node-server/compare/v0.2.0...v0.3.0) (2017-03-11)
+
+
+### Bug Fixes
+
+* **gt:** :bug:Fix gt.js, remove rest operates on deconstructing objects ([de65c99](https://github.com/vivaxy/gt-node-server/commit/de65c99))
+* **gt:** :bug:Fix updatePackageJSON ([428a838](https://github.com/vivaxy/gt-node-server/commit/428a838))
+
+
+### Features
+
+* **logs:** :wrench:Update logs path, now logs are generated in project path ([6a67a31](https://github.com/vivaxy/gt-node-server/commit/6a67a31))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/vivaxy/gt-node-server/compare/v0.1.0...v0.2.0) (2017-01-29)
 
