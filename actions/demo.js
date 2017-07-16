@@ -3,15 +3,10 @@
  * @author vivaxy
  */
 
-const action = async(ctx, next) => {
+exports.action = async(ctx, next) => {
     ctx.body = {
         code: 0
     };
 };
 
-const methods = ['get', 'post'];
-
-module.exports = {
-    action,
-    methods,
-};
+exports.methods = ['get', 'post'];

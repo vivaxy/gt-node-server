@@ -29,6 +29,7 @@ const copyFiles = async() => {
         'index.js',
         'LICENSE',
         'yarn.lock',
+        'actions',
     ];
 
     await sleep(1000);
