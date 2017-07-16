@@ -19,5 +19,5 @@ module.exports = async(ctx, next) => {
     } catch (ex) {
         logger.error(ex);
     }
-    logger.info(`[${request.method}] ${request.path} in ${getTimeStamp() - startTime}ms`);
+    logger.info(`[request] ${request.method} ${request.path} in ${getTimeStamp() - startTime}ms`);
 };

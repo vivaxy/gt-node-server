@@ -9,4 +9,4 @@ exports.action = async(ctx, next) => {
     };
 };
 
-exports.methods = ['get', 'post'];
+exports.methods = ['GET', 'POST'];

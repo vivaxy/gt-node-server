@@ -14,6 +14,13 @@ const router = new Router();
 const jsExt = `.js`;
 const relativeActionBase = `../actions`;
 
+const rightPad = (string, count) => {
+    while (string.length < count) {
+        string = string + ' ';
+    }
+    return string;
+};
+
 const getActionFiles = () => {
     const actionsBase = path.join(__dirname, relativeActionBase);
     return glob.sync(`${actionsBase}/**/*${jsExt}`, { dot: true });
@@ -23,7 +30,7 @@ const getConfigFromFile = (configPath) => {
     const configs = require(`${relativeActionBase}/${configPath}`);
     const routerPath = `/${configPath}`;
     const middleware = configs.action;
-    const methods = configs.methods || ['get'];
+    const methods = configs.methods || ['GET'];
     return {
         routerPath: routerPath,
         middleware,
@@ -49,8 +56,8 @@ const addActionsIntoRouter = () => {
             methods,
         } = getConfigFromFile(configPath);
         methods.forEach((method) => {
-            logger.debug(`[mount router] ${method}: ${routerPath}`);
-            router[method](routerPath, middleware);
+            logger.debug(`[mount router] ${rightPad(method.toUpperCase(), 7)} ${routerPath}`);
+            router[method.toLowerCase()](routerPath, middleware);
         });
     });
 };
