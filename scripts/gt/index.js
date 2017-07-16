@@ -28,7 +28,7 @@ const copyFiles = async() => {
         '.npmrc',
         'index.js',
         'LICENSE',
-        'yarn.lock',
+        'package-lock.json',
         'actions',
     ];
 

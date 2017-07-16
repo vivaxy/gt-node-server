@@ -18,7 +18,7 @@ Steps to make contributions
 
 - update codes
 - submit your changes by [`gacp`](https://github.com/vivaxy/gacp)
-- run `yarn run release` to update `CHANGELOG.md` and bump version
+- run `npm run release` to update `CHANGELOG.md` and bump version
 - run [`gacp`](https://github.com/vivaxy/gacp) to push changes into origin
 
 ----------
@@ -27,19 +27,19 @@ Steps to make contributions
 
 node server
 
-## FEATURE
+## Feature
 
 - log4js as logger
 - pm2 process manage
-- support in nodejs > v6.10.0
+- support in nodejs > v6.10.0, npm > 5
 
-## DEVELOP
+## Develop
 
-- `yarn run dev`
+- `npm run dev`
 - open in browser `http://127.0.0.1:8080`
 
-## DEPLOY
+## Deploy
 
-- `yarn start`
+- `npm start`
 - `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"`
 `> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"}}}`
