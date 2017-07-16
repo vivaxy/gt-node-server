@@ -157,10 +157,10 @@ exports.after = async() => {
     console.log(`
     please exec following command to initialize your project
 
-    - yarn install
+    - npm install
 
     then exec following command to start dev server
 
-    - yarn run dev
+    - npm run dev
 `);
 };
