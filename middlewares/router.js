@@ -16,7 +16,7 @@ const relativeActionBase = `../actions`;
 
 const getActionFiles = () => {
     const actionsBase = path.join(__dirname, relativeActionBase);
-    return glob.sync(`${actionsBase}/**/*${jsExt}`);
+    return glob.sync(`${actionsBase}/**/*${jsExt}`, { dot: true });
 };
 
 const getConfigFromFile = (configPath) => {
