@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/vivaxy/gt-node-server/compare/v0.4.0...v0.5.0) (2017-07-19)
+
+
+### Bug Fixes
+
+* **gt:** :bug:Fix gt scripts ouput ([657f791](https://github.com/vivaxy/gt-node-server/commit/657f791))
+
+
+### Features
+
+* **log:** :sparkles:Update log middleware ([cb42b97](https://github.com/vivaxy/gt-node-server/commit/cb42b97))
+* **router:** :sparkles:Support dot file routers ([0406435](https://github.com/vivaxy/gt-node-server/commit/0406435))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/vivaxy/gt-node-server/compare/v0.3.0...v0.4.0) (2017-07-16)
 
