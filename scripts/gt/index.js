@@ -12,9 +12,7 @@ const sleep = (timeout) => {
 };
 
 const copyFiles = (data) => {
-    const {
-        presets,
-    } = data;
+    const { presets } = data;
 
     const files = [
         'conf',
@@ -30,23 +28,19 @@ const copyFiles = (data) => {
     ];
 
     return async() => {
-        await sleep(1000);
+        await sleep(500);
         await presets.copyFiles(files);
     };
 };
 
 const updatePackageJSON = (data) => {
-    const {
-        project,
-        presets,
-    } = data;
-
+    const { project, presets } = data;
     const projectGit = project.git || {};
-
     const filename = 'package.json';
+
     return async() => {
-        await sleep(1000);
-        await presets.updateJson(filename, (data) => {
+        await sleep(500);
+        await presets.updateJson(filename, (json) => {
             const {
                 name,
                 version,
@@ -62,7 +56,7 @@ const updatePackageJSON = (data) => {
                 dependencies,
                 devDependencies,
                 peerDependencies,
-            } = data;
+            } = json;
 
             Reflect.deleteProperty(devDependencies, 'listr');
             Reflect.deleteProperty(devDependencies, 'standard-version');
@@ -79,7 +73,7 @@ const updatePackageJSON = (data) => {
                     url: projectGit.repositoryURL,
                 }),
                 keywords,
-                author,
+                author: projectGit.username,
                 license,
                 bugs: Object.assign(bugs, {
                     url: undefined,
@@ -93,17 +87,13 @@ const updatePackageJSON = (data) => {
 };
 
 const updateREADME = (data) => {
-    const {
-        project,
-        presets,
-    } = data;
-
+    const { project, presets } = data;
     const filename = 'README.md';
-    return async() => {
 
-        await sleep(1000);
-        await presets.updateFile(filename, (data) => {
-            const projectData = data.split('----------\n\n')[1];
+    return async() => {
+        await sleep(500);
+        await presets.updateFile(filename, (fileContent) => {
+            const projectData = fileContent.split('----------\n\n')[1];
             return projectData.replace(/gt-node-server/g, `${project.name}
 
 Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)`);
@@ -112,13 +102,11 @@ Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)
 };
 
 const updateCHANGELOG = (data) => {
-    const {
-        presets,
-    } = data;
-
+    const { presets } = data;
     const filename = 'CHANGELOG.md';
+
     return async() => {
-        await sleep(1000);
+        await sleep(500);
         await presets.updateFile(filename, () => {
             return '';
         });
@@ -146,7 +134,7 @@ exports.init = async(options) => {
     ]);
 };
 
-exports.after = async() => {
+exports.after = () => {
     console.log(`
     please exec following command to initialize your project
 
