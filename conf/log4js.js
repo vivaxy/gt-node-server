@@ -6,7 +6,7 @@
 const path = require('path');
 const log4js = require('log4js');
 
-const {log} = require('./paths');
+const { log } = require('./paths');
 
 const logFile = path.join(log, `default.log`);
 
@@ -35,7 +35,7 @@ module.exports = {
             appender: {
                 type: 'dateFile',
                 filename: logFile,
-            }
-        }
+            },
+        },
     ],
 };

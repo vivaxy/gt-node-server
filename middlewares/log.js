@@ -18,7 +18,7 @@ const stringify = (json) => {
     });
 };
 
-module.exports = async (ctx, next) => {
+module.exports = async(ctx, next) => {
     const request = ctx.request;
 
     const startTime = getTimeStamp();

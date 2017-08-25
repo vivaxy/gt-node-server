@@ -5,6 +5,4 @@
 
 const koaBody = require('koa-body');
 
-module.exports = koaBody({
-    multipart: true,
-});
+module.exports = koaBody({ multipart: true });
