@@ -9,7 +9,7 @@ const getTimeStamp = () => {
     return new Date().getTime();
 };
 
-const stringify = (json) => {
+const stringify = (json = {}) => {
     return JSON.stringify(json, (k, v) => {
         if (Array.isArray(v)) {
             return [v.length];
