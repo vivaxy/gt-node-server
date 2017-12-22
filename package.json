@@ -1,6 +1,6 @@
 {
   "name": "gt-node-server",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "node server gt scaffold",
   "main": "index.js",
   "scripts": {
