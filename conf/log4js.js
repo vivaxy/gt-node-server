@@ -3,12 +3,9 @@
  * @author vivaxy
  */
 
-const path = require('path');
 const log4js = require('log4js');
 
-const { log } = require('./paths');
-
-const logFile = path.join(log, `default.log`);
+const { logFile} = require('./paths');
 
 /**
  * log levels
@@ -24,18 +21,19 @@ const logFile = path.join(log, `default.log`);
  * OFF: new Level(Number.MAX_VALUE, "OFF"),
  */
 module.exports = {
-    logFile,
-    appenders: [
-        {
-            type: 'console',
+    appenders: {
+        console: { type: 'console' },
+        dateFile: {
+            type: 'dateFile',
+            filename: logFile,
         },
-        {
+        logLevelFilter: {
             type: 'logLevelFilter',
             level: log4js.levels.ALL,
-            appender: {
-                type: 'dateFile',
-                filename: logFile,
-            },
+            appender: 'dateFile',
         },
-    ],
+    },
+    categories: {
+        default: { appenders: ['console', 'logLevelFilter'], level: log4js.levels.ALL },
+    },
 };

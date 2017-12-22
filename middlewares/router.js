@@ -11,8 +11,8 @@ const logger = require('../lib/logger');
 
 const router = new Router();
 
-const jsExt = `.js`;
-const relativeActionBase = `../actions`;
+const jsExt = '.js';
+const relativeActionBase = '../actions';
 
 const rightPad = (string, count) => {
     while (string.length < count) {

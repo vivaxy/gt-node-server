@@ -6,7 +6,8 @@
 const path = require('path');
 
 const projectBase = path.join(__dirname, '..');
-const log = path.join(projectBase, 'logs');
+const logDirectory = path.join(projectBase, 'logs');
+const logFile = path.join(logDirectory, 'default.log');
 
 exports.projectBase = projectBase;
-exports.log = log;
+exports.logFile = logFile;
