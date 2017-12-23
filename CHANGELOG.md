@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/vivaxy/gt-node-server/compare/v0.6.2...v0.7.0) (2017-12-23)
+
+
+### Features
+
+* **nodemon config:** :wrench:Add nodemon config ([fc04304](https://github.com/vivaxy/gt-node-server/commit/fc04304))
+
+
+
 <a name="0.6.2"></a>
 ## [0.6.2](https://github.com/vivaxy/gt-node-server/compare/v0.6.1...v0.6.2) (2017-12-22)
 
