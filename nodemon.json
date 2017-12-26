@@ -1,6 +1,8 @@
 {
     "ext": "js json",
     "ignore": [
-        "logs/*"
+        "logs/*",
+        ".next/*",
+        "pages/*"
     ]
 }
