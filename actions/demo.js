@@ -3,9 +3,11 @@
  * @author vivaxy
  */
 
+const alphabet = 'abcdefghijklmnopqrstvuwxyz';
 exports.action = async(ctx, next) => {
     ctx.body = {
-        code: 0
+        code: 200,
+        list: alphabet.split(''),
     };
 };
 

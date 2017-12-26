@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "release": "standard-version && git push --follow-tags",
-    "start": "pm2 start index.js",
-    "dev": "nodemon index.js"
+    "start": "NODE_ENV=production next build && NODE_ENV=production pm2 start index.js",
+    "update": "NODE_ENV=production next build && NODE_ENV=production pm2 update",
+    "dev": "NODE_ENV=development nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -27,10 +28,14 @@
   "dependencies": {
     "fs-extra": "^1.0.0",
     "glob": "^7.1.1",
+    "isomorphic-unfetch": "^2.0.0",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
     "koa-router": "^7.1.1",
-    "log4js": "^2.4.1"
+    "log4js": "^2.4.1",
+    "next": "^4.2.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   },
   "devDependencies": {
     "babel-polyfill": "^6.23.0",

@@ -48,7 +48,7 @@ const getConfigPathFromAbsoluteActionFilePath = (absoluteActionPath) => {
 
 const addActionsIntoRouter = () => {
     const actionsPaths = getActionFiles();
-    actionsPaths.forEach((actionPath) => {
+    return actionsPaths.map((actionPath) => {
         const configPath = getConfigPathFromAbsoluteActionFilePath(actionPath);
         const {
             routerPath,
@@ -59,9 +59,15 @@ const addActionsIntoRouter = () => {
             logger.debug(`[mount router] ${rightPad(method.toUpperCase(), 7)} ${routerPath}`);
             router[method.toLowerCase()](routerPath, middleware);
         });
+        return {
+            routerPath,
+            middleware,
+            methods,
+        };
     });
 };
 
-addActionsIntoRouter();
-
-module.exports = router;
+exports.actions = addActionsIntoRouter();
+exports.routerMiddlewareRouters = router.routes();
+exports.routerMiddlewareAllowedMethods = router.allowedMethods();
+exports.routerMatch = router.match.bind(router);

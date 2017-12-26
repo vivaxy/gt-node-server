@@ -3,4 +3,5 @@
  * @author vivaxy
  */
 
-require('./lib/server');
+const start = require('./lib/server');
+start();
