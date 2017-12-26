@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-const fetch = require('isomorphic-unfetch');
+const fetch = require('isomorphic-fetch');
 
 const getFetchURL = ({ req, path }) => {
     if (req) {
