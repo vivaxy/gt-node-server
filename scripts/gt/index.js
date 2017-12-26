@@ -15,16 +15,19 @@ const copyFiles = (data) => {
     const { presets } = data;
 
     const files = [
+        'apis',
+        'client',
         'conf',
         'lib',
         'middlewares',
+        'pages',
         '.editorconfig',
         '.gitignore',
         '.npmrc',
         'index.js',
         'LICENSE',
+        'nodemon.json',
         'package-lock.json',
-        'actions',
     ];
 
     return async() => {
