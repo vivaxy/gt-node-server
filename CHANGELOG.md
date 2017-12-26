@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/vivaxy/gt-node-server/compare/v0.7.0...v0.8.0) (2017-12-26)
+
+
+### Features
+
+* **next:** :sparkles:Support next.js ([14844d9](https://github.com/vivaxy/gt-node-server/commit/14844d9))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/vivaxy/gt-node-server/compare/v0.6.2...v0.7.0) (2017-12-23)
 
