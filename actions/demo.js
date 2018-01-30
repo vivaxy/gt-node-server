@@ -3,7 +3,7 @@ const httpMethods = require('../conf/httpMethods');
 const Action = require('../lib/Action');
 const ArgTypes = require('../lib/ArgTypes');
 
-class Demo extends Action {
+module.exports = class extends Action {
     constructor(ctx) {
         super(ctx);
         this.argTypes = {
@@ -19,7 +19,4 @@ class Demo extends Action {
         this.setStatus(httpStatusCodes.OK);
         this.setBody(args);
     }
-}
-
-Demo.methods = [httpMethods.GET];
-module.exports = Demo;
+};

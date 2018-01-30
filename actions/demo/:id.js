@@ -7,7 +7,7 @@ const httpMethods = require('../../conf/httpMethods');
 const Action = require('../../lib/Action');
 const ArgTypes = require('../../lib/ArgTypes');
 
-class Id extends Action {
+module.exports = class extends Action {
     constructor(ctx) {
         super(ctx);
         this.argTypes = {
@@ -26,7 +26,4 @@ class Id extends Action {
             }
         });
     }
-}
-
-Id.methods = [httpMethods.POST];
-module.exports = Id;
+};

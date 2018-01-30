@@ -14,7 +14,7 @@ const sleep = timeout => {
     });
 };
 
-class LongTime extends Action {
+module.exports = class extends Action {
     constructor(ctx) {
         super(ctx);
     }
@@ -27,6 +27,4 @@ class LongTime extends Action {
         });
         logger.debug('long time end');
     }
-}
-
-module.exports = LongTime;
+};
