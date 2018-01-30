@@ -17,7 +17,7 @@ class Demo extends Action {
 
     get(args) {
         this.setStatus(httpStatusCodes.OK);
-        this.render(args);
+        this.setBody(args);
     }
 }
 

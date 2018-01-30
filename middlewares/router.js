@@ -8,7 +8,6 @@ const glob = require('glob');
 const Router = require('koa-router');
 
 const logger = require('../lib/logger');
-const DefaultAction = require('../lib/Action');
 
 const router = new Router();
 
@@ -32,7 +31,7 @@ const getActionFromFile = actionPath => {
     const routerPath = `/${actionPath}`;
     const middleware = async (ctx, next) => {
         const act = new Action(ctx);
-        act.execute();
+        await act.execute();
         await next();
     };
     const methods = Action.methods;

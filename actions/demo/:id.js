@@ -16,7 +16,7 @@ class Id extends Action {
     }
 
     post(args) {
-        this.render({
+        this.setBody({
             code: 0,
             data: {
                 body: this.ctx.request.body,

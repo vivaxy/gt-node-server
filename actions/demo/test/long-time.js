@@ -22,7 +22,7 @@ class LongTime extends Action {
     async get() {
         logger.debug('long time start');
         await sleep(10000);
-        this.render({
+        this.setBody({
             code: 0
         });
         logger.debug('long time end');
