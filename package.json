@@ -7,7 +7,8 @@
     "release": "standard-version && git push --follow-tags",
     "start": "NODE_ENV=production next build && NODE_ENV=production pm2 start index.js",
     "update": "NODE_ENV=production next build && NODE_ENV=production pm2 update",
-    "dev": "NODE_ENV=development nodemon index.js"
+    "dev": "NODE_ENV=development nodemon index.js",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -40,8 +41,17 @@
   "devDependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-register": "^6.24.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
     "listr": "^0.9.0",
     "nodemon": "^1.11.0",
+    "prettier": "^1.10.2",
     "standard-version": "^4.3.0"
+  },
+  "lint-staged": {
+    "**/**.{js,json,pcss,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

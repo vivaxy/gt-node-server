@@ -5,13 +5,13 @@
 
 const Listr = require('listr');
 
-const sleep = (timeout) => {
-    return new Promise((resolve) => {
+const sleep = timeout => {
+    return new Promise(resolve => {
         setTimeout(resolve, timeout);
     });
 };
 
-const copyFiles = (data) => {
+const copyFiles = data => {
     const { presets } = data;
 
     const files = [
@@ -24,91 +24,84 @@ const copyFiles = (data) => {
         '.editorconfig',
         '.gitignore',
         '.npmrc',
+        '.prettierignore',
         'index.js',
         'LICENSE',
         'nodemon.json',
-        'package-lock.json',
+        'yarn.lock'
     ];
 
-    return async() => {
+    return async () => {
         await sleep(500);
         await presets.copyFiles(files);
     };
 };
 
-const updatePackageJSON = (data) => {
+const updatePackageJSON = data => {
     const { project, presets } = data;
     const projectGit = project.git || {};
     const filename = 'package.json';
 
-    return async() => {
+    return async () => {
         await sleep(500);
-        await presets.updateJson(filename, (json) => {
+        await presets.updateJson(filename, json => {
             const {
-                name,
-                version,
-                description,
-                main,
-                scripts,
+                scripts: { release: _2, ...scripts },
                 repository,
-                keywords,
-                author,
-                license,
                 bugs,
-                homepage,
-                dependencies,
-                devDependencies,
-                peerDependencies,
+                devDependencies: {
+                    listr: _0,
+                    'standard-version': _1,
+                    ...devDependencies
+                },
+                ...rest
             } = json;
 
-            Reflect.deleteProperty(devDependencies, 'listr');
-            Reflect.deleteProperty(devDependencies, 'standard-version');
-            Reflect.deleteProperty(scripts, 'release');
-
             return {
+                ...rest,
                 name: project.name,
                 version: '0.0.0',
                 gtScaffoldVersion: version,
-                description,
-                main,
                 scripts,
-                repository: Object.assign(repository, {
-                    url: projectGit.repositoryURL,
-                }),
-                keywords,
+                repository: {
+                    ...repository,
+                    url: projectGit.repositoryURL
+                },
                 author: projectGit.username,
-                license,
-                bugs: Object.assign(bugs, {
-                    url: undefined,
-                }),
-                dependencies,
-                devDependencies,
-                peerDependencies,
+                bugs: {
+                    ...bugs,
+                    url: projectGit.repositoryURL
+                },
+                homepage: projectGit.repositoryURL,
+                devDependencies
             };
         });
     };
 };
 
-const updateREADME = (data) => {
+const updateREADME = data => {
     const { project, presets } = data;
     const filename = 'README.md';
 
-    return async() => {
+    return async () => {
         await sleep(500);
-        await presets.updateFile(filename, (fileContent) => {
+        await presets.updateFile(filename, fileContent => {
             const projectData = fileContent.split('----------\n\n')[1];
-            return projectData.replace(/gt-node-server/g, `${project.name}
+            return projectData.replace(
+                /gt-node-server/g,
+                `${project.name}
 
-Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)`);
+Initialized by [vivaxy/gt-node-server](https://github.com/vivaxy/gt-node-server)`
+            );
         });
     };
 };
 
-const updateCHANGELOG = (data) => {
+const updateCHANGELOG = data => {
     const { presets } = data;
     const filename = 'CHANGELOG.md';
 
-    return async() => {
+    return async () => {
         await sleep(500);
         await presets.updateFile(filename, () => {
             return '';
@@ -116,24 +109,24 @@ const updateCHANGELOG = (data) => {
     };
 };
 
-exports.init = async(options) => {
+exports.init = async options => {
     return new Listr([
         {
             title: 'copy files',
-            task: copyFiles(options),
+            task: copyFiles(options)
         },
         {
             title: 'update package.json',
-            task: updatePackageJSON(options),
+            task: updatePackageJSON(options)
         },
         {
             title: 'update README.md',
-            task: updateREADME(options),
+            task: updateREADME(options)
         },
         {
             title: 'update CHANGELOG.md',
-            task: updateCHANGELOG(options),
-        },
+            task: updateCHANGELOG(options)
+        }
     ]);
 };
 
