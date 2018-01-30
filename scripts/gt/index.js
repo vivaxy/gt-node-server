@@ -132,12 +132,12 @@ exports.init = async options => {
 
 exports.after = () => {
     console.log(`
-    please exec following command to initialize your project
+    Please exec following command to initialize your project:
 
-        - npm install
+        - yarn install
 
-    then exec following command to start dev server
+    Then exec following command to start dev server:
 
-        - npm run dev
+        - yarn dev
 `);
 };

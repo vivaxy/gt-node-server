@@ -8,11 +8,12 @@ const glob = require('glob');
 const Router = require('koa-router');
 
 const logger = require('../lib/logger');
+const DefaultAction = require('../lib/Action');
 
 const router = new Router();
 
 const jsExt = '.js';
-const relativeActionBase = '../apis';
+const relativeActionBase = '../actions';
 
 const rightPad = (string, count) => {
     while (string.length < count) {
@@ -26,19 +27,23 @@ const getActionFiles = () => {
     return glob.sync(`${actionsBase}/**/*${jsExt}`, { dot: true });
 };
 
-const getConfigFromFile = (configPath) => {
-    const configs = require(`${relativeActionBase}/${configPath}`);
-    const routerPath = `/${configPath}`;
-    const middleware = configs.action;
-    const methods = configs.methods || ['GET'];
+const getActionFromFile = actionPath => {
+    const Action = require(`${relativeActionBase}/${actionPath}`);
+    const routerPath = `/${actionPath}`;
+    const middleware = async (ctx, next) => {
+        const act = new Action(ctx);
+        act.execute();
+        await next();
+    };
+    const methods = Action.methods;
     return {
         routerPath: routerPath,
         middleware,
-        methods,
+        methods
     };
 };
 
-const getConfigPathFromAbsoluteActionFilePath = (absoluteActionPath) => {
+const getConfigPathFromAbsoluteActionFilePath = absoluteActionPath => {
     const actionsBase = path.join(__dirname, relativeActionBase);
     const relativeRouterPath = path.relative(actionsBase, absoluteActionPath);
     const routerPathDirName = path.dirname(relativeRouterPath);
@@ -48,21 +53,24 @@ const getConfigPathFromAbsoluteActionFilePath = (absoluteActionPath) => {
 
 const addActionsIntoRouter = () => {
     const actionsPaths = getActionFiles();
-    return actionsPaths.map((actionPath) => {
+    return actionsPaths.map(actionPath => {
         const configPath = getConfigPathFromAbsoluteActionFilePath(actionPath);
-        const {
-            routerPath,
-            middleware,
-            methods,
-        } = getConfigFromFile(configPath);
-        methods.forEach((method) => {
-            logger.debug(`[mount router] ${rightPad(method.toUpperCase(), 7)} ${routerPath}`);
+        const { routerPath, middleware, methods } = getActionFromFile(
+            configPath
+        );
+        methods.forEach(method => {
+            logger.debug(
+                `[mount router] ${rightPad(
+                    method.toUpperCase(),
+                    7
+                )} ${routerPath}`
+            );
             router[method.toLowerCase()](routerPath, middleware);
         });
         return {
             routerPath,
             middleware,
-            methods,
+            methods
         };
     });
 };
@@ -70,4 +78,3 @@ const addActionsIntoRouter = () => {
 exports.actions = addActionsIntoRouter();
 exports.routerMiddlewareRouters = router.routes();
 exports.routerMiddlewareAllowedMethods = router.allowedMethods();
-exports.routerMatch = router.match.bind(router);
