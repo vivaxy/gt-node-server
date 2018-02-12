@@ -3,12 +3,12 @@
  * @author vivaxy
  */
 
-const http = require('http');
-const path = require('path');
-const glob = require('glob');
+import http from 'http';
+import path from 'path';
+import glob from 'glob';
 
-const Action = require('../lib/Action');
-const httpStatusCodes = require('../conf/httpStatusCodes');
+import Action from '../lib/Action';
+import httpStatusCodes from '../conf/httpStatusCodes';
 
 /**
  *  - map
@@ -80,7 +80,7 @@ const traverseConfigs = (
  * - support restful
  * - support path config
  */
-module.exports = async (ctx, next) => {
+export default async (ctx, next) => {
     const { path: requestPath } = ctx.request;
     const ActionClass = requestPath.split('/').reduce(
         (results, pathSection) => {

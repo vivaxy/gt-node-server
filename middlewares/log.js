@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-const logger = require('../lib/logger');
+import logger from '../lib/logger';
 
 const getTimeStamp = () => {
     return new Date().getTime();
@@ -18,7 +18,7 @@ const stringify = (json = {}) => {
     });
 };
 
-module.exports = async(ctx, next) => {
+export default async (ctx, next) => {
     const request = ctx.request;
 
     const startTime = getTimeStamp();
@@ -28,5 +28,13 @@ module.exports = async(ctx, next) => {
     } catch (ex) {
         logger.error(ex);
     }
-    logger.info(`[request] ${request.method} ${request.path}; params=${stringify(ctx.params)}, query=${stringify(ctx.query)}, body=${stringify(ctx.request.body)}; [response] status=${ctx.status}, body=${stringify(ctx.body)}; [time] ${getTimeStamp() - startTime}ms`);
+    logger.info(
+        `[request] ${request.method} ${request.path}; params=${stringify(
+            ctx.params
+        )}, query=${stringify(ctx.query)}, body=${stringify(
+            ctx.request.body
+        )}; [response] status=${ctx.status}, body=${stringify(
+            ctx.body
+        )}; [time] ${getTimeStamp() - startTime}ms`
+    );
 };

@@ -15,7 +15,7 @@ const copyFiles = data => {
     const { presets } = data;
 
     const files = [
-        'apis',
+        'actions',
         'client',
         'conf',
         'lib',

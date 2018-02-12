@@ -3,11 +3,8 @@
  * @author vivaxy
  */
 
-const path = require('path');
+import path from 'path';
 
-const projectBase = path.join(__dirname, '..');
+export const projectBase = path.join(__dirname, '..');
 const logDirectory = path.join(projectBase, 'logs');
-const logFile = path.join(logDirectory, 'default.log');
-
-exports.projectBase = projectBase;
-exports.logFile = logFile;
+export const logFile = path.join(logDirectory, 'default.log');

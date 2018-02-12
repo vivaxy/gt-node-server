@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
+    "@std/esm": "^0.21.4",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.1",
     "isomorphic-fetch": "^2.2.1",

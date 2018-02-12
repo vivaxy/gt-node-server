@@ -3,23 +3,24 @@
  * @author vivaxy
  */
 
-import React from 'react';
-import Link from 'next/link';
+const React = require('react');
 
-import fetch from '../client/fetch';
+const fetch = require('../client/fetch');
 
 const List = ({ list }) => (
     <div>
-        <Link href="/"><p>go to /</p></Link>
-        <ul>{
-            list.map((item) => {
-                return <li key={item}>{item}</li>
-            })
-        }</ul>
+        <Link href="/">
+            <p>go to /</p>
+        </Link>
+        <ul>
+            {list.map(item => {
+                return <li key={item}>{item}</li>;
+            })}
+        </ul>
     </div>
 );
 
-List.getInitialProps = async({ req }) => {
+List.getInitialProps = async ({ req }) => {
     const response = await fetch({ req, path: '/demo' });
     return { list: response.list };
 };
