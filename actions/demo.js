@@ -1,9 +1,9 @@
-const httpStatusCodes = require('../conf/httpStatusCodes');
-const httpMethods = require('../conf/httpMethods');
-const Action = require('../lib/Action');
-const ArgTypes = require('../lib/ArgTypes');
+import httpStatusCodes from '../conf/httpStatusCodes';
+import httpMethods from '../conf/httpMethods';
+import Action from '../lib/Action';
+import ArgTypes from '../lib/ArgTypes';
 
-module.exports = class extends Action {
+export default class extends Action {
     constructor(ctx) {
         super(ctx);
         this.argTypes = {
@@ -19,4 +19,4 @@ module.exports = class extends Action {
         this.setStatus(httpStatusCodes.OK);
         this.setBody(args);
     }
-};
+}

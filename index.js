@@ -3,6 +3,6 @@
  * @author vivaxy
  */
 
-require = require('@std/esm')(module, { esm: 'js', cjs: true });
+require = require('@std/esm')(module);
 const start = require('./lib/server').default;
 start();

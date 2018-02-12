@@ -3,77 +3,45 @@
  * @author vivaxy
  */
 
-import http from 'http';
 import path from 'path';
-import glob from 'glob';
+import globPromise from 'glob-promise';
 
-import Action from '../lib/Action';
-import httpStatusCodes from '../conf/httpStatusCodes';
-
-/**
- *  - map
- *      - (:)pathSection: map
- *          - ...
- *      - (:)pathSection: class
- */
-const routerConfigs = new Map();
+import logger from '../lib/logger';
+import NotFound from '../lib/NotFound';
 
 const jsExt = '.js';
 const relativeActionBase = '../actions';
 
-const rightPad = (string, count) => {
-    while (string.length < count) {
-        string = string + ' ';
-    }
-    return string;
-};
-
-const getActionFiles = () => {
+const loadActionMapFromFile = async () => {
     const actionsBase = path.join(__dirname, relativeActionBase);
-    return glob.sync(`${actionsBase}/**/*${jsExt}`, { dot: true });
+    const actions = await globPromise(`${actionsBase}/**/*${jsExt}`, {
+        dot: true
+    });
+    const map = new Map();
+    actions.map(absolutePath => {
+        const relativePath =
+            '/' + path.relative(actionsBase, absolutePath).slice(0, -3);
+        map.set(relativePath, absolutePath);
+        logger.info('Mount router', relativePath);
+    });
+    return map;
 };
 
-const getActionFromFile = actionPath => {
-    const Action = require(`${relativeActionBase}/${actionPath}`);
-    const routerPath = `/${actionPath}`;
-    const middleware = async (ctx, next) => {
-        const act = new Action(ctx);
-        await act.execute();
-        await next();
-    };
-    const methods = Action.methods;
-    return {
-        routerPath: routerPath,
-        middleware,
-        methods
-    };
+const loadActionsFromFilePromise = loadActionMapFromFile();
+
+const matchRouter = (routerPath, requestPath) => {
+    return true;
 };
 
-class NotFound extends Action {
-    constructor(ctx) {
-        super(ctx);
+const findActionClass = async requestPath => {
+    const actions = await loadActionsFromFilePromise;
+    const routerPath = Array.from(actions.keys()).find(currentRouterPath => {
+        return matchRouter(currentRouterPath, requestPath);
+    });
+    if (!routerPath) {
+        return NotFound;
     }
-
-    execute() {
-        this.setState(httpStatusCodes.NOT_FOUND);
-        this.setBody(http.STATUS_CODES[httpStatusCodes.NOT_FOUND]);
-    }
-}
-
-const traverseConfigs = (
-    validConfigs,
-    requestPathSections,
-    depth,
-    matchedRouters
-) => {
-    const nextValidConfigs = [];
-    const nextMatchedRouters = [];
-    return traverseConfigs(
-        nextValidConfigs,
-        requestPathSections,
-        depth + 1,
-        nextMatchedRouters
-    );
+    return await import(actions.get(routerPath));
 };
 
 /**
@@ -82,29 +50,7 @@ const traverseConfigs = (
  */
 export default async (ctx, next) => {
     const { path: requestPath } = ctx.request;
-    const ActionClass = requestPath.split('/').reduce(
-        (results, pathSection) => {
-            if (!results.length) {
-                return NotFound;
-            }
-            return results.reduce((acc, result) => {
-                if (!result.get) {
-                    return acc;
-                }
-                result.keys().reduce((res, key) => {
-                    if (key.startsWith(':')) {
-                        return [...res, result.get(key)];
-                    }
-                    return res;
-                }, []);
-                const nextConfig = result.get(pathSection);
-                if (nextConfig) {
-                    return [...acc, nextConfig];
-                }
-            }, []);
-        },
-        [routerConfigs]
-    );
+    const ActionClass = (await findActionClass(requestPath)).default;
 
     const action = new ActionClass(ctx);
     await action.execute();
