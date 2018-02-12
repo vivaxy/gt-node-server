@@ -8,6 +8,7 @@ import globPromise from 'glob-promise';
 
 import logger from '../lib/logger';
 import NotFound from '../lib/NotFound';
+import routerMatches from '../lib/routerMatches';
 
 const jsExt = '.js';
 const relativeActionBase = '../actions';
@@ -29,14 +30,12 @@ const loadActionMapFromFile = async () => {
 
 const loadActionsFromFilePromise = loadActionMapFromFile();
 
-const matchRouter = (routerPath, requestPath) => {
-    return true;
-};
-
-const findActionClass = async requestPath => {
+const findActionClass = async (requestPath, ctx) => {
     const actions = await loadActionsFromFilePromise;
     const routerPath = Array.from(actions.keys()).find(currentRouterPath => {
-        return matchRouter(currentRouterPath, requestPath);
+        const params = routerMatches(currentRouterPath, requestPath);
+        ctx.params = params;
+        return params;
     });
     if (!routerPath) {
         return NotFound;
@@ -50,7 +49,7 @@ const findActionClass = async requestPath => {
  */
 export default async (ctx, next) => {
     const { path: requestPath } = ctx.request;
-    const ActionClass = (await findActionClass(requestPath)).default;
+    const ActionClass = (await findActionClass(requestPath, ctx)).default;
 
     const action = new ActionClass(ctx);
     await action.execute();
