@@ -41,7 +41,7 @@ const findActionClass = async (requestPath, ctx) => {
     if (!routerPath) {
         return NotFound;
     }
-    return await import(actions.get(routerPath));
+    return (await import(actions.get(routerPath))).default;
 };
 
 /**
@@ -50,7 +50,7 @@ const findActionClass = async (requestPath, ctx) => {
  */
 export default async (ctx, next) => {
     const { path: requestPath } = ctx.request;
-    const ActionClass = (await findActionClass(requestPath, ctx)).default;
+    const ActionClass = await findActionClass(requestPath, ctx);
 
     const action = new ActionClass(ctx);
     await action.execute();
