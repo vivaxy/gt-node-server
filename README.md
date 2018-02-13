@@ -43,24 +43,37 @@ A node server
 ### Actions
 
 ```js
-// This is required.
-exports.action = async(ctx, next) => {
-    ctx.body = {
-        // Post method request body
-        body: ctx.request.body,
-        // URL query strings
-        query: ctx.query,
-        // Restful url path parameters
-        params: ctx.params,
-    };
-};
+import httpStatusCodes from '../conf/httpStatusCodes';
+import httpMethods from '../conf/httpMethods';
+import Action from '../lib/Action';
+import ArgTypes from '../lib/ArgTypes';
 
-// This is optional. `GET` is supported by default.
-exports.methods = ['GET'];
+export default class extends Action {
+    constructor(ctx) {
+        super(ctx);
+        this.argTypes = {
+            name: ArgTypes.string.isRequired,
+            age: ArgTypes.number
+        };
+        this.defaultArgs = {
+            age: 18
+        };
+    }
+
+    get(args) {
+        this.setStatus(httpStatusCodes.OK);
+        this.setBody(args);
+    }
+
+    post(args) {
+        this.setStatus(httpStatusCodes.OK);
+        this.setBody(args);
+    }
+}
 ```
 
 ## Deploy
 
 - `npm start`
 - `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"`
-`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"}}}`
+`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"},"args":{"id":"1"}}}`

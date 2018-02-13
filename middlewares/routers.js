@@ -35,6 +35,7 @@ const findActionClass = async (requestPath, ctx) => {
     const routerPath = Array.from(actions.keys()).find(currentRouterPath => {
         const params = routerMatches(currentRouterPath, requestPath);
         ctx.params = params;
+        ctx.request.params = params;
         return params;
     });
     if (!routerPath) {

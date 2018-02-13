@@ -3,10 +3,10 @@
  * @author vivaxy
  */
 
-const httpMethods = require('../../../conf/httpMethods');
-const Action = require('../../../lib/Action');
-const ArgTypes = require('../../../lib/ArgTypes');
-const logger = require('../../../lib/logger');
+import httpMethods from '../../../conf/httpMethods';
+import Action from '../../../lib/Action';
+import ArgTypes from '../../../lib/ArgTypes';
+import logger from '../../../lib/logger';
 
 const sleep = timeout => {
     return new Promise(resolve => {
@@ -14,7 +14,7 @@ const sleep = timeout => {
     });
 };
 
-module.exports = class extends Action {
+export default class extends Action {
     constructor(ctx) {
         super(ctx);
     }
@@ -27,4 +27,4 @@ module.exports = class extends Action {
         });
         logger.debug('long time end');
     }
-};
+}
