@@ -3,12 +3,14 @@
  * @author vivaxy
  */
 
+import fs from 'fs';
 import path from 'path';
 import globPromise from 'glob-promise';
 
 import logger from '../lib/logger';
 import NotFound from '../lib/NotFound';
 import routerMatches from '../lib/routerMatches';
+import { projectBase, nodeServerInner } from '../conf/paths';
 
 const jsExt = '.js';
 const relativeActionBase = '../actions';
@@ -44,15 +46,57 @@ const findActionClass = async (requestPath, ctx) => {
     return (await import(actions.get(routerPath))).default;
 };
 
+const handleInnerActions = async ctx => {
+    const { path: requestPath } = ctx.request;
+    if (requestPath === `/${nodeServerInner}/react.js`) {
+        ctx.body = fs.createReadStream(
+            path.join(
+                projectBase,
+                'node_modules',
+                'react',
+                'umd',
+                process.env.NODE_ENV === 'production'
+                    ? 'react.production.min.js'
+                    : 'react.development.js'
+            )
+        );
+        ctx.set('Content-Type', 'text/javascript');
+    }
+    if (requestPath === `/${nodeServerInner}/react-dom.js`) {
+        ctx.body = fs.createReadStream(
+            path.join(
+                projectBase,
+                'node_modules',
+                'react-dom',
+                'umd',
+                process.env.NODE_ENV === 'production'
+                    ? 'react-dom.production.min.js'
+                    : 'react-dom.development.js'
+            )
+        );
+        ctx.set('Content-Type', 'text/javascript');
+    }
+    // todo
+    if (requestPath === `/${nodeServerInner}/node-server.js`) {
+        ctx.body = `// todo previous scripts, get element and container
+// ReactDOM.hydrate(element, container);`;
+        ctx.set('Content-Type', 'text/javascript');
+    }
+    // todo bundle scripts
+};
+
 /**
  * - support restful
  * - support path config
  */
 export default async (ctx, next) => {
     const { path: requestPath } = ctx.request;
-    const ActionClass = await findActionClass(requestPath, ctx);
-
-    const action = new ActionClass(ctx);
-    await action.execute();
+    if (requestPath.startsWith(`/${nodeServerInner}`)) {
+        await handleInnerActions(ctx);
+    } else {
+        const ActionClass = await findActionClass(requestPath, ctx);
+        const action = new ActionClass(ctx);
+        await action.execute();
+    }
     await next();
 };

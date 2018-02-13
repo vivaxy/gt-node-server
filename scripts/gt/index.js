@@ -20,7 +20,6 @@ const copyFiles = data => {
         'conf',
         'lib',
         'middlewares',
-        'pages',
         '.editorconfig',
         '.gitignore',
         '.npmrc',

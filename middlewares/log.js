@@ -9,13 +9,23 @@ const getTimeStamp = () => {
     return new Date().getTime();
 };
 
-const stringify = (json = {}) => {
-    return JSON.stringify(json, (k, v) => {
-        if (Array.isArray(v)) {
-            return [v.length];
-        }
-        return v;
-    });
+const stringify = (body = {}) => {
+    if (body === null) {
+        return null;
+    }
+    if (typeof body.pipe === 'function') {
+        return '[object stream]';
+    }
+    try {
+        return JSON.stringify(body, (k, v) => {
+            if (Array.isArray(v)) {
+                return [v.length];
+            }
+            return v;
+        });
+    } catch (ex) {
+        return body;
+    }
 };
 
 export default async (ctx, next) => {

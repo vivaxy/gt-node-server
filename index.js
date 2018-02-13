@@ -3,6 +3,6 @@
  * @author vivaxy
  */
 
-require = require('@std/esm')(module);
-const start = require('./lib/server').default;
-start();
+require('@babel/polyfill');
+require('@babel/register');
+require('./lib/server').default();
