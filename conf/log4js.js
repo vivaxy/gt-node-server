@@ -3,9 +3,9 @@
  * @author vivaxy
  */
 
-import log4js from 'log4js';
+const log4js = require('log4js');
 
-import { logFile } from './paths';
+const { logFile } = require('./paths.js');
 
 /**
  * log levels
@@ -20,7 +20,7 @@ import { logFile } from './paths';
  * MARK: new Level(9007199254740992, "MARK"), // 2^53
  * OFF: new Level(Number.MAX_VALUE, "OFF"),
  */
-export default {
+module.exports = {
   appenders: {
     console: { type: 'console' },
     dateFile: {

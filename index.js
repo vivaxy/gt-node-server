@@ -3,6 +3,6 @@
  * @author vivaxy
  */
 
-require('@babel/polyfill');
-require('@babel/register');
-require('./lib/server').default();
+(async () => {
+  await require('./lib/server')();
+})();

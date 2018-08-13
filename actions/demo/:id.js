@@ -3,11 +3,10 @@
  * @author vivaxy
  */
 
-import httpMethods from '../../conf/httpMethods';
-import Action from '../../lib/Action';
-import ArgTypes from '../../lib/ArgTypes';
+const MethodsAction = require('../../lib/MethodsAction.js');
+const ArgTypes = require('../../lib/ArgTypes.js');
 
-export default class extends Action {
+module.exports = class extends MethodsAction {
   constructor(ctx) {
     super(ctx);
     this.argTypes = {
@@ -16,14 +15,16 @@ export default class extends Action {
   }
 
   post(args) {
-    this.setBody({
-      code: 0,
-      data: {
-        body: this.ctx.request.body,
-        query: this.ctx.request.query,
-        params: this.ctx.request.params,
-        args,
+    return {
+      body: {
+        code: 0,
+        data: {
+          body: this.ctx.request.body,
+          query: this.ctx.request.query,
+          params: this.ctx.request.params,
+          args,
+        },
       },
-    });
+    };
   }
-}
+};

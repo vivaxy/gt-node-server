@@ -3,6 +3,6 @@
  * @author vivaxy
  */
 
-import koaBody from 'koa-body';
+const koaBody = require('koa-body');
 
-export default koaBody({ multipart: true });
+module.exports = koaBody({ multipart: true });

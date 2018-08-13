@@ -3,10 +3,8 @@
  * @author vivaxy
  */
 
-import httpMethods from '../../../conf/httpMethods';
-import Action from '../../../lib/Action';
-import ArgTypes from '../../../lib/ArgTypes';
-import logger from '../../../lib/logger';
+const MethodsAction = require('../../../lib/MethodsAction.js');
+const logger = require('../../../lib/logger.js');
 
 const sleep = (timeout) => {
   return new Promise((resolve) => {
@@ -14,7 +12,7 @@ const sleep = (timeout) => {
   });
 };
 
-export default class extends Action {
+module.exports = class extends MethodsAction {
   constructor(ctx) {
     super(ctx);
   }
@@ -22,9 +20,11 @@ export default class extends Action {
   async get() {
     logger.debug('long time start');
     await sleep(10000);
-    this.setBody({
-      code: 0,
-    });
     logger.debug('long time end');
+    return {
+      body: {
+        code: 0,
+      },
+    };
   }
-}
+};

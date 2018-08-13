@@ -3,21 +3,21 @@
  * @author vivaxy
  */
 
-import fs from 'fs';
-import path from 'path';
-import globPromise from 'glob-promise';
+const fs = require('fs');
+const path = require('path');
+const glob = require('fast-glob');
 
-import logger from '../lib/logger';
-import NotFound from '../lib/NotFound';
-import routerMatches from '../lib/routerMatches';
-import { projectBase, nodeServerInner } from '../conf/paths';
+const logger = require('../lib/logger.js');
+const NotFoundAction = require('../lib/NotFoundAction.js');
+const routerMatches = require('../lib/routerMatches.js');
+const { projectBase, nodeServerInner } = require('../conf/paths.js');
 
 const jsExt = '.js';
 const relativeActionBase = '../actions';
 
 const loadActionMapFromFile = async () => {
   const actionsBase = path.join(__dirname, relativeActionBase);
-  const actions = await globPromise(`${actionsBase}/**/*${jsExt}`, {
+  const actions = await glob(`${actionsBase}/**/*${jsExt}`, {
     dot: true,
   });
   const map = new Map();
@@ -41,9 +41,9 @@ const findActionClass = async (requestPath, ctx) => {
     return params;
   });
   if (!routerPath) {
-    return NotFound;
+    return NotFoundAction;
   }
-  return (await import(actions.get(routerPath))).default;
+  return require(actions.get(routerPath));
 };
 
 const handleInnerActions = async (ctx) => {
@@ -89,14 +89,14 @@ const handleInnerActions = async (ctx) => {
  * - support restful
  * - support path config
  */
-export default async (ctx, next) => {
+module.exports = async (ctx, next) => {
   const { path: requestPath } = ctx.request;
-  if (requestPath.startsWith(`/${nodeServerInner}`)) {
+  if (requestPath.startsWith(`/${nodeServerInner}/`)) {
     await handleInnerActions(ctx);
   } else {
     const ActionClass = await findActionClass(requestPath, ctx);
     const action = new ActionClass(ctx);
-    await action.execute();
+    await action.execute(action);
   }
   await next();
 };

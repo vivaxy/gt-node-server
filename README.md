@@ -43,32 +43,35 @@ A node server
 ### Actions
 
 ```js
-import httpStatusCodes from '../conf/httpStatusCodes';
-import httpMethods from '../conf/httpMethods';
-import Action from '../lib/Action';
-import ArgTypes from '../lib/ArgTypes';
+const httpStatusCodes = require('../conf/httpStatusCodes.js');
+const MethodsAction = require('../lib/MethodsAction.js');
+const ArgTypes = require('../lib/ArgTypes.js');
 
-export default class extends Action {
-    constructor(ctx) {
-        super(ctx);
-        this.argTypes = {
-            name: ArgTypes.string.isRequired,
-            age: ArgTypes.number
-        };
-        this.defaultArgs = {
-            age: 18
-        };
-    }
+export default class extends MethodsAction {
+  constructor(ctx) {
+    super(ctx);
+    this.argTypes = {
+      name: ArgTypes.string.isRequired,
+      age: ArgTypes.number
+    };
+    this.defaultArgs = {
+      age: 18
+    };
+  }
 
-    get(args) {
-        this.setStatus(httpStatusCodes.OK);
-        this.setBody(args);
+  get(args) {
+    return {
+      status: httpStatusCodes.OK,
+      body: args,
     }
+  }
 
-    post(args) {
-        this.setStatus(httpStatusCodes.OK);
-        this.setBody(args);
+  post(args) {
+    return {
+      status: httpStatusCodes.OK,
+      body: args,
     }
+  }
 }
 ```
 

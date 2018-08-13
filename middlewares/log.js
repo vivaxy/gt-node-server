@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import logger from '../lib/logger';
+const logger = require('../lib/logger.js');
 
 const getTimeStamp = () => {
   return new Date().getTime();
@@ -28,7 +28,7 @@ const stringify = (body = {}) => {
   }
 };
 
-export default async (ctx, next) => {
+module.exports = async (ctx, next) => {
   const request = ctx.request;
 
   const startTime = getTimeStamp();
