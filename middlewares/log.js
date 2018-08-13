@@ -6,45 +6,45 @@
 import logger from '../lib/logger';
 
 const getTimeStamp = () => {
-    return new Date().getTime();
+  return new Date().getTime();
 };
 
 const stringify = (body = {}) => {
-    if (body === null) {
-        return null;
-    }
-    if (typeof body.pipe === 'function') {
-        return '[object stream]';
-    }
-    try {
-        return JSON.stringify(body, (k, v) => {
-            if (Array.isArray(v)) {
-                return [v.length];
-            }
-            return v;
-        });
-    } catch (ex) {
-        return body;
-    }
+  if (body === null) {
+    return null;
+  }
+  if (typeof body.pipe === 'function') {
+    return '[object stream]';
+  }
+  try {
+    return JSON.stringify(body, (k, v) => {
+      if (Array.isArray(v)) {
+        return [v.length];
+      }
+      return v;
+    });
+  } catch (ex) {
+    return body;
+  }
 };
 
 export default async (ctx, next) => {
-    const request = ctx.request;
+  const request = ctx.request;
 
-    const startTime = getTimeStamp();
+  const startTime = getTimeStamp();
 
-    try {
-        await next();
-    } catch (ex) {
-        logger.error(ex);
-    }
-    logger.info(
-        `[request] ${request.method} ${request.path}; params=${stringify(
-            ctx.params
-        )}, query=${stringify(ctx.query)}, body=${stringify(
-            ctx.request.body
-        )}; [response] status=${ctx.status}, body=${stringify(
-            ctx.body
-        )}; [time] ${getTimeStamp() - startTime}ms`
-    );
+  try {
+    await next();
+  } catch (ex) {
+    logger.error(ex);
+  }
+  logger.info(
+    `[request] ${request.method} ${request.path}; params=${stringify(
+      ctx.params
+    )}, query=${stringify(ctx.query)}, body=${stringify(
+      ctx.request.body
+    )}; [response] status=${ctx.status}, body=${stringify(
+      ctx.body
+    )}; [time] ${getTimeStamp() - startTime}ms`
+  );
 };

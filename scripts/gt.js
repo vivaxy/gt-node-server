@@ -4,7 +4,7 @@
  */
 
 if (!global._babelPolyfill) {
-    require('@babel/polyfill');
+  require('@babel/polyfill');
 }
 require('@babel/register');
 module.exports = require('./gt/index');

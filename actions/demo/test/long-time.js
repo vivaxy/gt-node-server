@@ -8,23 +8,23 @@ import Action from '../../../lib/Action';
 import ArgTypes from '../../../lib/ArgTypes';
 import logger from '../../../lib/logger';
 
-const sleep = timeout => {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
+const sleep = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
 };
 
 export default class extends Action {
-    constructor(ctx) {
-        super(ctx);
-    }
+  constructor(ctx) {
+    super(ctx);
+  }
 
-    async get() {
-        logger.debug('long time start');
-        await sleep(10000);
-        this.setBody({
-            code: 0
-        });
-        logger.debug('long time end');
-    }
+  async get() {
+    logger.debug('long time start');
+    await sleep(10000);
+    this.setBody({
+      code: 0,
+    });
+    logger.debug('long time end');
+  }
 }

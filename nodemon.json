@@ -1,4 +1,4 @@
 {
-    "ext": "js json",
-    "ignore": ["logs/*"]
+  "ext": "js json",
+  "ignore": ["logs/*"]
 }

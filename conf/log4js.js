@@ -21,22 +21,22 @@ import { logFile } from './paths';
  * OFF: new Level(Number.MAX_VALUE, "OFF"),
  */
 export default {
-    appenders: {
-        console: { type: 'console' },
-        dateFile: {
-            type: 'dateFile',
-            filename: logFile
-        },
-        logLevelFilter: {
-            type: 'logLevelFilter',
-            level: log4js.levels.ALL,
-            appender: 'dateFile'
-        }
+  appenders: {
+    console: { type: 'console' },
+    dateFile: {
+      type: 'dateFile',
+      filename: logFile,
     },
-    categories: {
-        default: {
-            appenders: ['console', 'logLevelFilter'],
-            level: log4js.levels.ALL
-        }
-    }
+    logLevelFilter: {
+      type: 'logLevelFilter',
+      level: log4js.levels.ALL,
+      appender: 'dateFile',
+    },
+  },
+  categories: {
+    default: {
+      appenders: ['console', 'logLevelFilter'],
+      level: log4js.levels.ALL,
+    },
+  },
 };

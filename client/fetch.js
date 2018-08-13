@@ -6,13 +6,13 @@
 const fetch = require('isomorphic-fetch');
 
 const getFetchURL = ({ req, path }) => {
-    if (req) {
-        return 'http://' + req.headers.host + path;
-    }
-    return path;
+  if (req) {
+    return 'http://' + req.headers.host + path;
+  }
+  return path;
 };
 
-module.exports = async({ req, path }) => {
-    const response = await fetch(getFetchURL({ req, path }));
-    return await response.json();
+module.exports = async ({ req, path }) => {
+  const response = await fetch(getFetchURL({ req, path }));
+  return await response.json();
 };

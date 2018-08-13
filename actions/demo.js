@@ -6,62 +6,62 @@ import Action from '../lib/Action';
 import ArgTypes from '../lib/ArgTypes';
 
 class LifeCircle extends Component {
-    constructor(props) {
-        super(props);
-        this.logger = message => {
-            console.log('LifeCircle:', message);
-        };
-        this.logger('constructor');
-    }
+  constructor(props) {
+    super(props);
+    this.logger = (message) => {
+      console.log('LifeCircle:', message);
+    };
+    this.logger('constructor');
+  }
 
-    componentWillMount() {
-        this.logger('componentWillMount');
-    }
+  componentWillMount() {
+    this.logger('componentWillMount');
+  }
 
-    componentDidMount() {
-        this.logger('componentDidMount');
-    }
+  componentDidMount() {
+    this.logger('componentDidMount');
+  }
 
-    componentWillReceiveProps() {
-        this.logger('componentWillReceiveProps');
-    }
+  componentWillReceiveProps() {
+    this.logger('componentWillReceiveProps');
+  }
 
-    shouldComponentUpdate() {
-        this.logger('shouldComponentUpdate');
-    }
+  shouldComponentUpdate() {
+    this.logger('shouldComponentUpdate');
+  }
 
-    componentWillUpdate() {
-        this.logger('componentWillUpdate');
-    }
+  componentWillUpdate() {
+    this.logger('componentWillUpdate');
+  }
 
-    componentDidUpdate() {
-        this.logger('componentDidUpdate');
-    }
+  componentDidUpdate() {
+    this.logger('componentDidUpdate');
+  }
 
-    componentWillUnmount() {
-        this.logger('componentWillUnmount');
-    }
+  componentWillUnmount() {
+    this.logger('componentWillUnmount');
+  }
 
-    render() {
-        this.logger('render');
-        return 'LifeCircle';
-    }
+  render() {
+    this.logger('render');
+    return 'LifeCircle';
+  }
 }
 
 export default class extends Action {
-    constructor(ctx) {
-        super(ctx);
-        this.argTypes = {
-            name: ArgTypes.string.isRequired,
-            age: ArgTypes.number
-        };
-        this.defaultArgs = {
-            age: 18
-        };
-    }
+  constructor(ctx) {
+    super(ctx);
+    this.argTypes = {
+      name: ArgTypes.string.isRequired,
+      age: ArgTypes.number,
+    };
+    this.defaultArgs = {
+      age: 18,
+    };
+  }
 
-    get(args) {
-        this.setStatus(httpStatusCodes.OK);
-        this.render(LifeCircle);
-    }
+  get(args) {
+    this.setStatus(httpStatusCodes.OK);
+    this.render(LifeCircle);
+  }
 }
