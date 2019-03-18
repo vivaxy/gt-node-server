@@ -9,41 +9,41 @@ const glob = require('fast-glob');
 
 const logger = require('../lib/logger.js');
 const NotFoundAction = require('../lib/NotFoundAction.js');
-const routerMatches = require('../lib/routerMatches.js');
+const createMatchRoutes = require('../lib/createMatchRoutes.js');
 const { projectBase, nodeServerInner } = require('../conf/paths.js');
 
 const jsExt = '.js';
 const relativeActionBase = '../actions';
 
-const loadActionMapFromFile = async () => {
+const createMatchRoutesFromFiles = async () => {
   const actionsBase = path.join(__dirname, relativeActionBase);
   const actions = await glob(`${actionsBase}/**/*${jsExt}`, {
     dot: true,
   });
-  const map = new Map();
+  const actionPaths = [];
   actions.map((absolutePath) => {
     const relativePath =
       '/' + path.relative(actionsBase, absolutePath).slice(0, -3);
-    map.set(relativePath, absolutePath);
+    actionPaths.push(relativePath);
     logger.info('Mount router', relativePath);
   });
-  return map;
+  return createMatchRoutes(actionPaths);
 };
 
-const loadActionsFromFilePromise = loadActionMapFromFile();
+const createMatchRoutesFromFilesPromise = createMatchRoutesFromFiles();
 
 const findActionClass = async (requestPath, ctx) => {
-  const actions = await loadActionsFromFilePromise;
-  const routerPath = Array.from(actions.keys()).find((currentRouterPath) => {
-    const params = routerMatches(currentRouterPath, requestPath);
+  const matchRoutes = await createMatchRoutesFromFilesPromise;
+  try {
+    const { actionPath, params } = matchRoutes(requestPath);
     ctx.params = params;
-    ctx.request.params = params;
-    return params;
-  });
-  if (!routerPath) {
-    return NotFoundAction;
+    return require(path.join(__dirname, relativeActionBase, '.' + actionPath));
+  } catch (e) {
+    if (e.name === 'Cannot find action path') {
+      return NotFoundAction;
+    }
+    throw e;
   }
-  return require(actions.get(routerPath));
 };
 
 const handleInnerActions = async (ctx) => {
