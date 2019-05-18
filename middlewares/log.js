@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-const logger = require('../lib/logger.js');
+const log4js = require('../lib/log4js.js');
 
 const getTimeStamp = () => {
   return new Date().getTime();
@@ -28,8 +28,16 @@ const stringify = (body = {}) => {
   }
 };
 
+const logger = log4js.getLogger('middleware:log');
+
 module.exports = async (ctx, next) => {
   const request = ctx.request;
+
+  logger.info(
+    `<- ${request.method} ${request.path} params=${stringify(
+      ctx.params
+    )} query=${stringify(ctx.query)} body=${stringify(ctx.request.body)}`
+  );
 
   const startTime = getTimeStamp();
 
@@ -38,13 +46,9 @@ module.exports = async (ctx, next) => {
   } catch (ex) {
     logger.error(ex);
   }
+
   logger.info(
-    `[request] ${request.method} ${request.path}; params=${stringify(
-      ctx.params
-    )}, query=${stringify(ctx.query)}, body=${stringify(
-      ctx.request.body
-    )}; [response] status=${ctx.status}, body=${stringify(
-      ctx.body
-    )}; [time] ${getTimeStamp() - startTime}ms`
+    `-> ${request.method} ${request.path} ${ctx.status} ${getTimeStamp() -
+      startTime}ms body=${stringify(ctx.body)}`
   );
 };

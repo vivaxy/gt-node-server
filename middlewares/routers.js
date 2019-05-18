@@ -7,13 +7,15 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('fast-glob');
 
-const logger = require('../lib/logger.js');
+const log4js = require('../lib/log4js.js');
 const NotFoundAction = require('../lib/NotFoundAction.js');
 const createMatchRoutes = require('../lib/createMatchRoutes.js');
+const errors = require('../conf/errors.js');
 const { projectBase, nodeServerInner } = require('../conf/paths.js');
 
 const jsExt = '.js';
 const relativeActionBase = '../actions';
+const logger = log4js.getLogger('middleware:router');
 
 const createMatchRoutesFromFiles = async () => {
   const actionsBase = path.join(__dirname, relativeActionBase);
@@ -39,7 +41,7 @@ const findActionClass = async (requestPath, ctx) => {
     ctx.params = params;
     return require(path.join(__dirname, relativeActionBase, '.' + actionPath));
   } catch (e) {
-    if (e.name === 'Cannot find action path') {
+    if (e.message === errors.CANNOT_FIND_ACTION_PATH) {
       return NotFoundAction;
     }
     throw e;

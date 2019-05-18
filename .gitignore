@@ -4,3 +4,4 @@ node_modules
 /logs
 /.next
 yarn-error.log*
+.vscode
