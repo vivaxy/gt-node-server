@@ -43,34 +43,23 @@ A node server
 ### Actions
 
 ```js
-const httpStatusCodes = require('../conf/httpStatusCodes.js');
-const MethodsAction = require('../lib/MethodsAction.js');
-const ArgTypes = require('../lib/ArgTypes.js');
-
-export default class extends MethodsAction {
-  constructor(ctx) {
-    super(ctx);
-    this.argTypes = {
-      name: ArgTypes.string.isRequired,
-      age: ArgTypes.number
-    };
-    this.defaultArgs = {
-      age: 18
-    };
+exports.argTypes = {
+  name: ArgTypes.string.isRequired,
+  age: ArgTypes.number
+};
+exports.defaultArgs = {
+  age: 18
+};
+exports.get = function get({ args, httpStatusCodes }) {
+  return {
+    status: httpStatusCodes.OK,
+    body: args,
   }
-
-  get(args) {
-    return {
-      status: httpStatusCodes.OK,
-      body: args,
-    }
-  }
-
-  post(args) {
-    return {
-      status: httpStatusCodes.OK,
-      body: args,
-    }
+};
+exports.post = function post({ args, httpStatusCodes }) {
+  return {
+    status: httpStatusCodes.OK,
+    body: args,
   }
 }
 ```
@@ -79,4 +68,4 @@ export default class extends MethodsAction {
 
 - `npm start`
 - `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"`
-`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"},"args":{"id":"1"}}}`
+`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"},"args":{"id":"3"}}}`

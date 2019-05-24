@@ -12,8 +12,8 @@ exports[httpMethods.POST] = function post({ args, ctx }) {
       code: 0,
       data: {
         body: ctx.request.body,
-        query: ctx.request.query,
-        params: ctx.request.params,
+        query: ctx.query,
+        params: ctx.params,
         args,
       },
     },

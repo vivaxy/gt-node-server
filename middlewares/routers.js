@@ -76,7 +76,7 @@ function getArgs(ctx) {
     case httpMethods.GET:
       return { ...ctx.request.query, ...ctx.request.params };
     case httpMethods.POST:
-      return { ...ctx.request.body, ...ctx.request.params };
+      return { ...ctx.request.params, ...ctx.request.body };
   }
 }
 
