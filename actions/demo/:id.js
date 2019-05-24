@@ -3,28 +3,23 @@
  * @author vivaxy
  */
 
-const MethodsAction = require('../../lib/MethodsAction.js');
+const httpMethods = require('../../configs/httpMethods.js');
 const ArgTypes = require('../../lib/ArgTypes.js');
 
-module.exports = class extends MethodsAction {
-  constructor(ctx) {
-    super(ctx);
-    this.argTypes = {
-      id: ArgTypes.string.isRequired,
-    };
-  }
-
-  post(args) {
-    return {
-      body: {
-        code: 0,
-        data: {
-          body: this.ctx.request.body,
-          query: this.ctx.request.query,
-          params: this.ctx.request.params,
-          args,
-        },
+exports[httpMethods.POST] = function post({ args, ctx }) {
+  return {
+    body: {
+      code: 0,
+      data: {
+        body: ctx.request.body,
+        query: ctx.request.query,
+        params: ctx.request.params,
+        args,
       },
-    };
-  }
+    },
+  };
+};
+
+exports.argTypes = {
+  id: ArgTypes.string.isRequired,
 };

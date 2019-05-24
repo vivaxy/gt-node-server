@@ -6,99 +6,149 @@
 const fs = require('fs');
 const path = require('path');
 const glob = require('fast-glob');
+const Router = require('koa-router');
 
-const log4js = require('../lib/log4js.js');
-const NotFoundAction = require('../lib/NotFoundAction.js');
-const createMatchRoutes = require('../lib/createMatchRoutes.js');
-const errors = require('../conf/errors.js');
-const { projectBase, nodeServerInner } = require('../conf/paths.js');
+const ArgTypes = require('../lib/ArgTypes.js');
+const getLogger = require('../lib/getLogger.js');
+const httpMethods = require('../configs/httpMethods.js');
+const { projectBase, nodeServerInner } = require('../configs/paths.js');
+const httpStatusCodes = require('../configs/httpStatusCodes.js');
 
-const jsExt = '.js';
-const relativeActionBase = '../actions';
-const logger = log4js.getLogger('middleware:router');
+const router = new Router();
+const logger = getLogger('middleware:router');
 
-const createMatchRoutesFromFiles = async () => {
-  const actionsBase = path.join(__dirname, relativeActionBase);
+async function getActions() {
+  const actionsBase = path.join(__dirname, '..', 'actions');
+  const jsExt = '.js';
   const actions = await glob(`${actionsBase}/**/*${jsExt}`, {
     dot: true,
   });
-  const actionPaths = [];
-  actions.map((absolutePath) => {
+  return actions.map((absolutePath) => {
     const relativePath =
       '/' + path.relative(actionsBase, absolutePath).slice(0, -3);
-    actionPaths.push(relativePath);
-    logger.info('Mount router', relativePath);
+    return {
+      relativePath,
+      absolutePath,
+      module: require(absolutePath),
+    };
   });
-  return createMatchRoutes(actionPaths);
-};
+}
 
-const createMatchRoutesFromFilesPromise = createMatchRoutesFromFiles();
-
-const findActionClass = async (requestPath, ctx) => {
-  const matchRoutes = await createMatchRoutesFromFilesPromise;
-  try {
-    const { actionPath, params } = matchRoutes(requestPath);
-    ctx.params = params;
-    return require(path.join(__dirname, relativeActionBase, '.' + actionPath));
-  } catch (e) {
-    if (e.message === errors.CANNOT_FIND_ACTION_PATH) {
-      return NotFoundAction;
-    }
-    throw e;
-  }
-};
-
-const handleInnerActions = async (ctx) => {
-  const { path: requestPath } = ctx.request;
-  if (requestPath === `/${nodeServerInner}/react.js`) {
-    ctx.body = fs.createReadStream(
-      path.join(
-        projectBase,
-        'node_modules',
-        'react',
-        'umd',
-        process.env.NODE_ENV === 'production'
-          ? 'react.production.min.js'
-          : 'react.development.js'
-      )
-    );
-    ctx.set('Content-Type', 'text/javascript');
-  }
-  if (requestPath === `/${nodeServerInner}/react-dom.js`) {
-    ctx.body = fs.createReadStream(
-      path.join(
-        projectBase,
-        'node_modules',
-        'react-dom',
-        'umd',
-        process.env.NODE_ENV === 'production'
-          ? 'react-dom.production.min.js'
-          : 'react-dom.development.js'
-      )
-    );
-    ctx.set('Content-Type', 'text/javascript');
-  }
-  // todo
-  if (requestPath === `/${nodeServerInner}/node-server.js`) {
-    ctx.body = `// todo previous scripts, get element and container
-// ReactDOM.hydrate(element, container);`;
-    ctx.set('Content-Type', 'text/javascript');
-  }
-  // todo bundle scripts
-};
-
-/**
- * - support restful
- * - support path config
- */
-module.exports = async (ctx, next) => {
-  const { path: requestPath } = ctx.request;
-  if (requestPath.startsWith(`/${nodeServerInner}/`)) {
-    await handleInnerActions(ctx);
-  } else {
-    const ActionClass = await findActionClass(requestPath, ctx);
-    const action = new ActionClass(ctx);
-    await action.execute(action);
-  }
+router.get(`/${nodeServerInner}/react.js`, async (ctx, next) => {
+  ctx.body = fs.createReadStream(
+    path.join(
+      projectBase,
+      'node_modules',
+      'react',
+      'umd',
+      process.env.NODE_ENV === 'production'
+        ? 'react.production.min.js'
+        : 'react.development.js'
+    )
+  );
+  ctx.set('Content-Type', 'text/javascript');
   await next();
+});
+router.get(`/${nodeServerInner}/react-dom.js`, async (ctx, next) => {
+  ctx.body = fs.createReadStream(
+    path.join(
+      projectBase,
+      'node_modules',
+      'react-dom',
+      'umd',
+      process.env.NODE_ENV === 'production'
+        ? 'react-dom.production.min.js'
+        : 'react-dom.development.js'
+    )
+  );
+  ctx.set('Content-Type', 'text/javascript');
+  await next();
+});
+router.get(`/${nodeServerInner}/node-server.js`, async (ctx, next) => {
+  ctx.body = `// todo previous scripts, get element and container
+// ReactDOM.hydrate(element, container);`;
+  ctx.set('Content-Type', 'text/javascript');
+  await next();
+});
+
+function getArgs(ctx) {
+  switch (ctx.request.method) {
+    case httpMethods.GET:
+      return { ...ctx.request.query, ...ctx.request.params };
+    case httpMethods.POST:
+      return { ...ctx.request.body, ...ctx.request.params };
+  }
+}
+
+function render(args) {
+  return `<html>
+  <title>Render</title>
+  <body>
+    <pre>${JSON.stringify(args, null, 2)}</pre>
+  </body>
+  </html>`;
+}
+
+function createDefaultRouterHandler({
+  relativePath,
+  handler,
+  argTypes,
+  defaultArgs = {},
+}) {
+  return async (ctx, next) => {
+    const args = getArgs(ctx);
+    if (argTypes) {
+      try {
+        ArgTypes.check(argTypes, args);
+      } catch (ex) {
+        ctx.status = httpStatusCodes.BAD_REQUEST;
+        ctx.body = ex.message;
+        return;
+      }
+    }
+    try {
+      const response = await handler({
+        ctx,
+        httpMethods,
+        httpStatusCodes,
+        render,
+        logger: getLogger(relativePath),
+        args: ArgTypes.merge(args, defaultArgs),
+        ArgTypes,
+      });
+      ctx.status = response.status || httpStatusCodes.OK;
+      ctx.body = response.body;
+    } catch (ex) {
+      ctx.status = httpStatusCodes.INTERNAL_SERVER_ERROR;
+      ctx.body = ex.message;
+    }
+    await next();
+  };
+}
+
+module.exports = {
+  async init() {
+    const actions = await getActions();
+    actions.forEach(({ module, relativePath }) => {
+      Object.keys(httpMethods)
+        .concat('use')
+        .forEach((method) => {
+          const handler = module[method];
+          if (handler) {
+            router[method.toLowerCase()](
+              relativePath,
+              createDefaultRouterHandler({
+                relativePath,
+                handler,
+                argTypes: module.argTypes,
+                defaultArgs: module.defaultArgs,
+              })
+            );
+            logger.info('Mount router', method, relativePath);
+          }
+        });
+    });
+  },
+  middleware: router.routes(),
+  router,
 };

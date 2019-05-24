@@ -1,35 +1,18 @@
-const httpStatusCodes = require('../conf/httpStatusCodes.js');
-const MethodsAction = require('../lib/MethodsAction.js');
+const httpMethods = require('../configs/httpMethods.js');
 const ArgTypes = require('../lib/ArgTypes.js');
 
-module.exports = class extends MethodsAction {
-  constructor(ctx) {
-    super(ctx);
-    this.argTypes = {
-      name: ArgTypes.string.isRequired,
-      age: ArgTypes.number,
-    };
-    this.defaultArgs = {
-      age: 18,
-    };
-  }
+exports[httpMethods.GET] = function get({ args, render, httpStatusCodes }) {
+  return {
+    status: httpStatusCodes.OK,
+    body: render(args),
+  };
+};
 
-  get(args) {
-    return {
-      status: httpStatusCodes.OK,
-      body: this.render(args),
-    };
-  }
+exports.argTypes = {
+  name: ArgTypes.string.isRequired,
+  age: ArgTypes.number,
+};
 
-  render(args) {
-    return `<!doctype html>
-<html>
-<head>
-head
-</head>
-<body>
-body
-</body>
-</html>`;
-  }
+exports.defaultArgs = {
+  age: 18,
 };

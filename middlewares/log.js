@@ -3,15 +3,18 @@
  * @author vivaxy
  */
 
-const log4js = require('../lib/log4js.js');
+const logger = require('../lib/getLogger.js')('middleware:log');
 
-const getTimeStamp = () => {
+function getTimeStamp() {
   return new Date().getTime();
-};
+}
 
-const stringify = (body = {}) => {
+function stringify(body = {}) {
   if (body === null) {
     return null;
+  }
+  if (typeof body === 'string') {
+    return body;
   }
   if (typeof body.pipe === 'function') {
     return '[object stream]';
@@ -24,31 +27,41 @@ const stringify = (body = {}) => {
       return v;
     });
   } catch (ex) {
-    return body;
+    return body.toString();
   }
-};
+}
 
-const logger = log4js.getLogger('middleware:log');
-
-module.exports = async (ctx, next) => {
-  const request = ctx.request;
-
-  logger.info(
-    `<- ${request.method} ${request.path} params=${stringify(
-      ctx.params
-    )} query=${stringify(ctx.query)} body=${stringify(ctx.request.body)}`
-  );
-
-  const startTime = getTimeStamp();
-
-  try {
-    await next();
-  } catch (ex) {
-    logger.error(ex);
+function format(body = {}) {
+  const bodyString = stringify(body);
+  const maxLength = 50;
+  if (bodyString.length > maxLength) {
+    return bodyString.slice(0, maxLength - 3) + '...';
   }
+  return bodyString;
+}
 
-  logger.info(
-    `-> ${request.method} ${request.path} ${ctx.status} ${getTimeStamp() -
-      startTime}ms body=${stringify(ctx.body)}`
-  );
+module.exports = {
+  init() {},
+  async middleware(ctx, next) {
+    const request = ctx.request;
+
+    logger.info(
+      `<- ${request.method} ${request.path} params=${format(
+        ctx.params
+      )} query=${format(ctx.query)} body=${format(ctx.request.body)}`
+    );
+
+    const startTime = getTimeStamp();
+
+    try {
+      await next();
+    } catch (ex) {
+      logger.error(ex);
+    }
+
+    logger.info(
+      `-> ${request.method} ${request.path} ${ctx.status} ${getTimeStamp() -
+        startTime}ms body=${format(ctx.body)}`
+    );
+  },
 };
