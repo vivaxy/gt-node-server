@@ -10,6 +10,7 @@ const Router = require('koa-router');
 
 const ArgTypes = require('../lib/ArgTypes.js');
 const getLogger = require('../lib/getLogger.js');
+const ServerError = require('../lib/ServerError.js');
 const httpMethods = require('../configs/httpMethods.js');
 const { projectBase, nodeServerInner } = require('../configs/paths.js');
 const httpStatusCodes = require('../configs/httpStatusCodes.js');
@@ -20,10 +21,12 @@ const logger = getLogger('middleware:router');
 async function getActions() {
   const actionsBase = path.join(__dirname, '..', 'actions');
   const jsExt = '.js';
-  const actions = await glob(`${actionsBase}/**/*${jsExt}`, {
+
+  const actionAbsolutePaths = await glob(`${actionsBase}/**/*${jsExt}`, {
     dot: true,
   });
-  return actions.map((absolutePath) => {
+
+  const actions = actionAbsolutePaths.map((absolutePath) => {
     const relativePath =
       '/' + path.relative(actionsBase, absolutePath).slice(0, -3);
     return {
@@ -31,6 +34,27 @@ async function getActions() {
       absolutePath,
       module: require(absolutePath),
     };
+  });
+  function getParamDepth(action) {
+    return action.relativePath.split('/').findIndex((section) => {
+      return section.startsWith(':');
+    });
+  }
+  return actions.sort((prev, next) => {
+    const prevIndex = getParamDepth(prev);
+    const nextIndex = getParamDepth(next);
+    if (prevIndex > nextIndex) {
+      return -1;
+    }
+    if (prevIndex < nextIndex) {
+      return 1;
+    }
+    if (prevIndex === -1) {
+      return 0;
+    }
+    throw new Error(
+      'Router params conflict: ' + prev.relativePath + ', ' + next.relativePath
+    );
   });
 }
 
@@ -95,7 +119,7 @@ function createDefaultRouterHandler({
   argTypes,
   defaultArgs = {},
 }) {
-  return async (ctx, next) => {
+  return async (ctx) => {
     const args = getArgs(ctx);
     if (argTypes) {
       try {
@@ -107,22 +131,32 @@ function createDefaultRouterHandler({
       }
     }
     try {
-      const response = await handler({
-        ctx,
-        httpMethods,
-        httpStatusCodes,
-        render,
-        logger: getLogger(relativePath),
+      const body = await handler({
         args: ArgTypes.merge(args, defaultArgs),
+        logger: getLogger(relativePath),
+        render,
+        ServerError,
         ArgTypes,
+        ctx,
       });
-      ctx.status = response.status || httpStatusCodes.OK;
-      ctx.body = response.body;
+      ctx.status = httpStatusCodes.OK;
+      ctx.body = body;
+      return;
     } catch (ex) {
-      ctx.status = httpStatusCodes.INTERNAL_SERVER_ERROR;
-      ctx.body = ex.message;
+      if (ex instanceof ServerError) {
+        ctx.status = ex.status;
+        ctx.body = ex.message;
+        return;
+      }
+      const status = httpStatusCodes.INTERNAL_SERVER_ERROR;
+      ctx.status = status;
+      // todo render error page
+      if (process.env.NODE_ENV === 'production') {
+        ctx.body = http.STATUS_CODES[status];
+      } else {
+        ctx.body = ex.stack;
+      }
     }
-    await next();
   };
 }
 
@@ -131,6 +165,7 @@ module.exports = {
     const actions = await getActions();
     actions.forEach(({ module, relativePath }) => {
       Object.keys(httpMethods)
+        .concat(Object.keys(httpMethods).map((method) => method.toLowerCase()))
         .concat('use')
         .forEach((method) => {
           const handler = module[method];

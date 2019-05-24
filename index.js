@@ -4,5 +4,9 @@
  */
 
 (async () => {
-  await require('./lib/server')();
+  try {
+    await require('./lib/server')();
+  } catch (ex) {
+    console.error(ex);
+  }
 })();

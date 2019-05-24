@@ -3,19 +3,16 @@
  * @author vivaxy
  */
 
-const httpMethods = require('../../configs/httpMethods.js');
 const ArgTypes = require('../../lib/ArgTypes.js');
 
-exports[httpMethods.POST] = function post({ args, ctx }) {
+exports.post = function post({ args, ctx }) {
   return {
-    body: {
-      code: 0,
-      data: {
-        body: ctx.request.body,
-        query: ctx.query,
-        params: ctx.params,
-        args,
-      },
+    code: 0,
+    data: {
+      body: ctx.request.body,
+      query: ctx.query,
+      params: ctx.params,
+      args,
     },
   };
 };

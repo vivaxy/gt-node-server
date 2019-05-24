@@ -1,11 +1,7 @@
-const httpMethods = require('../configs/httpMethods.js');
 const ArgTypes = require('../lib/ArgTypes.js');
 
-exports[httpMethods.GET] = function get({ args, render, httpStatusCodes }) {
-  return {
-    status: httpStatusCodes.OK,
-    body: render(args),
-  };
+exports.get = function get({ args, render, httpStatusCodes }) {
+  return render(args);
 };
 
 exports.argTypes = {
