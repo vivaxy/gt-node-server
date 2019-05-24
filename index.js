@@ -3,5 +3,6 @@
  * @author vivaxy
  */
 
-const start = require('./lib/server');
-start();
+(async () => {
+  await require('./lib/server')();
+})();

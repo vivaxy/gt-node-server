@@ -5,7 +5,7 @@
 
 const log4js = require('log4js');
 
-const { logFile} = require('./paths');
+const { logFile } = require('./paths.js');
 
 /**
  * log levels
@@ -21,19 +21,22 @@ const { logFile} = require('./paths');
  * OFF: new Level(Number.MAX_VALUE, "OFF"),
  */
 module.exports = {
-    appenders: {
-        console: { type: 'console' },
-        dateFile: {
-            type: 'dateFile',
-            filename: logFile,
-        },
-        logLevelFilter: {
-            type: 'logLevelFilter',
-            level: log4js.levels.ALL,
-            appender: 'dateFile',
-        },
+  appenders: {
+    console: { type: 'console' },
+    dateFile: {
+      type: 'dateFile',
+      filename: logFile,
     },
-    categories: {
-        default: { appenders: ['console', 'logLevelFilter'], level: log4js.levels.ALL },
+    logLevelFilter: {
+      type: 'logLevelFilter',
+      level: log4js.levels.ALL,
+      appender: 'dateFile',
     },
+  },
+  categories: {
+    default: {
+      appenders: ['console', 'logLevelFilter'],
+      level: log4js.levels.ALL,
+    },
+  },
 };

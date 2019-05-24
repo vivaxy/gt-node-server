@@ -43,24 +43,29 @@ A node server
 ### Actions
 
 ```js
-// This is required.
-exports.action = async(ctx, next) => {
-    ctx.body = {
-        // Post method request body
-        body: ctx.request.body,
-        // URL query strings
-        query: ctx.query,
-        // Restful url path parameters
-        params: ctx.params,
-    };
+exports.argTypes = {
+  name: ArgTypes.string.isRequired,
+  age: ArgTypes.number
 };
-
-// This is optional. `GET` is supported by default.
-exports.methods = ['GET'];
+exports.defaultArgs = {
+  age: 18
+};
+exports.get = function get({ args, httpStatusCodes }) {
+  return {
+    status: httpStatusCodes.OK,
+    body: args,
+  }
+};
+exports.post = function post({ args, httpStatusCodes }) {
+  return {
+    status: httpStatusCodes.OK,
+    body: args,
+  }
+}
 ```
 
 ## Deploy
 
 - `npm start`
 - `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"`
-`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"}}}`
+`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"},"args":{"id":"3"}}}`

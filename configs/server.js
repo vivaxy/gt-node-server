@@ -3,6 +3,4 @@
  * @author vivaxy
  */
 
-const port = 8080;
-
-exports.port = port;
+exports.port = 8080;
