@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-const ArgTypes = require('../../lib/ArgTypes.js');
+const ArgTypes = require('../../lib/arg_types.js');
 
 exports.post = function post({ args, ctx }) {
   return {

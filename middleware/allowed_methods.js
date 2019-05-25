@@ -7,5 +7,5 @@ const router = require('./routers.js').router;
 
 module.exports = {
   init() {},
-  middleware: router.allowedMethods(),
+  handler: router.allowedMethods(),
 };

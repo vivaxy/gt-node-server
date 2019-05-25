@@ -1,6 +1,6 @@
-const ArgTypes = require('../lib/ArgTypes.js');
+const ArgTypes = require('../lib/arg_types.js');
 
-exports.get = function get({ args, render, httpStatusCodes }) {
+exports.get = function get({ args, render }) {
   return render(args);
 };
 

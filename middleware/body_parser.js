@@ -7,5 +7,5 @@ const koaBody = require('koa-body');
 
 module.exports = {
   init() {},
-  middleware: koaBody({ multipart: true }),
+  handler: koaBody({ multipart: true }),
 };

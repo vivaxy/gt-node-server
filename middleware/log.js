@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-const logger = require('../lib/getLogger.js')('middleware:log');
+const logger = require('../lib/get_logger.js')('middleware:log');
 
 function getTimeStamp() {
   return new Date().getTime();
@@ -42,7 +42,7 @@ function format(body = {}) {
 
 module.exports = {
   init() {},
-  async middleware(ctx, next) {
+  async handler(ctx, next) {
     const request = ctx.request;
 
     logger.info(
