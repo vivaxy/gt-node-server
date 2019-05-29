@@ -28,13 +28,15 @@
   },
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
+    "ejs": "^2.6.1",
     "fast-glob": "^2.2.2",
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^8.0.1",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
     "log4js": "^3.0.5",
-    "react-dom": "^16.4.2"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.3.4",

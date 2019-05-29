@@ -4,8 +4,10 @@
  */
 
 const fs = require('fs');
+const ejs = require('ejs');
 const http = require('http');
 const path = require('path');
+const fse = require('fs-extra');
 const glob = require('fast-glob');
 const Router = require('koa-router');
 
@@ -19,6 +21,7 @@ const httpStatusCodes = require('../configs/http_status_codes.js');
 const router = new Router();
 const logger = getLogger('middleware:router');
 const jsExt = '.js';
+const ejsExt = '.ejs';
 
 async function getActions() {
   const actionsBase = path.join(__dirname, '..', 'actions');
@@ -107,27 +110,20 @@ function getArgs(ctx) {
   }
 }
 
-function checkFileExists(p) {
-  return new Promise((resolve) => {
-    fs.access(p, fs.constants.F_OK, (err) => {
-      resolve(!err);
-    });
-  });
-}
-
 async function getRender(relativePath) {
   const pageRendererFile = path.join(
     __dirname,
     '..',
-    'pages',
-    relativePath + jsExt
+    'views',
+    relativePath + ejsExt
   );
-  const fileExists = await checkFileExists(pageRendererFile);
+  const fileExists = await fse.pathExists(pageRendererFile);
   if (fileExists) {
-    return require(pageRendererFile);
+    const fileContent = await fse.readFile(pageRendererFile);
+    return ejs.compile(fileContent, {});
   }
   return () => {
-    throw new Error('Missing page for: ' + relativePath);
+    throw new Error('Missing view for: ' + relativePath);
   };
 }
 
