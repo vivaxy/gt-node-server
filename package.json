@@ -7,7 +7,7 @@
     "release": "standard-version && git push --follow-tags",
     "start": "NODE_ENV=production next build && NODE_ENV=production pm2 start index.js",
     "update": "NODE_ENV=production next build && NODE_ENV=production pm2 update",
-    "dev": "NODE_ENV=development nodemon index.js",
+    "dev": "NODE_ENV=development node index.js",
     "precommit": "npm run test && lint-staged",
     "test": "ava"
   },
@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
+    "chokidar": "^3.0.0",
     "ejs": "^2.6.1",
     "fast-glob": "^2.2.2",
     "fs-extra": "^8.0.1",

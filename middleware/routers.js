@@ -11,6 +11,7 @@ const fse = require('fs-extra');
 const glob = require('fast-glob');
 const Router = require('koa-router');
 
+const watch = require('../lib/watch.js');
 const ArgTypes = require('../lib/arg_types.js');
 const getLogger = require('../lib/get_logger.js');
 const ServerError = require('../lib/server_error.js');
@@ -22,23 +23,27 @@ const router = new Router();
 const logger = getLogger('middleware:router');
 const jsExt = '.js';
 const ejsExt = '.ejs';
+const actionsBase = path.join(__dirname, '..', 'actions');
+
+function getRelativePath(absolutePath) {
+  return '/' + path.relative(actionsBase, absolutePath).slice(0, -3);
+}
+
+function getActionFromAbsolutePath(absolutePath) {
+  const relativePath = getRelativePath(absolutePath);
+  return {
+    relativePath,
+    absolutePath,
+    module: require(absolutePath),
+  };
+}
 
 async function getActions() {
-  const actionsBase = path.join(__dirname, '..', 'actions');
-
   const actionAbsolutePaths = await glob(`${actionsBase}/**/*${jsExt}`, {
     dot: true,
   });
 
-  const actions = actionAbsolutePaths.map((absolutePath) => {
-    const relativePath =
-      '/' + path.relative(actionsBase, absolutePath).slice(0, -3);
-    return {
-      relativePath,
-      absolutePath,
-      module: require(absolutePath),
-    };
-  });
+  const actions = actionAbsolutePaths.map(getActionFromAbsolutePath);
 
   function getParamDepth(action) {
     return action.relativePath.split('/').findIndex((section) => {
@@ -119,7 +124,7 @@ async function getRender(relativePath) {
   );
   const fileExists = await fse.pathExists(pageRendererFile);
   if (fileExists) {
-    const fileContent = await fse.readFile(pageRendererFile);
+    const fileContent = await fse.readFile(pageRendererFile, 'utf8');
     return ejs.compile(fileContent, {});
   }
   return () => {
@@ -185,42 +190,53 @@ function handleUppercaseExports({ relativePath, module }) {
   });
 }
 
+function getMountActionPromises({ relativePath, absolutePath, module }) {
+  const methods = [
+    ...Object.keys(httpMethods).map((method) => method.toLowerCase()),
+    'use',
+  ];
+  handleUppercaseExports({ relativePath, module });
+  const validMethods = methods.filter((method) =>
+    module.hasOwnProperty(method)
+  );
+  const validActions = validMethods.map((method) => {
+    return {
+      method,
+      relativePath,
+      module,
+    };
+  });
+  return validActions.map(({ method, relativePath, module }) => {
+    return (async () => {
+      const handler = module[method];
+      const routerHandler = await createDefaultRouterHandler({
+        relativePath,
+        handler,
+        argTypes: module.argTypes,
+        defaultArgs: module.defaultArgs,
+      });
+      router[method.toLowerCase()](relativePath, routerHandler);
+      logger.info('Mount router', method, relativePath);
+    })();
+  });
+}
+
 module.exports = {
   async init() {
     const rawActions = await getActions();
-    const methods = [
-      ...Object.keys(httpMethods).map((method) => method.toLowerCase()),
-      'use',
-    ];
-    const actions = rawActions.reduce((acc, { module, relativePath }) => {
-      handleUppercaseExports({ relativePath, module });
-      const validMethods = methods.filter((method) =>
-        module.hasOwnProperty(method)
-      );
-      const validActions = validMethods.map((method) => {
-        return {
-          method,
-          relativePath,
-          module,
-        };
-      });
-      return [...acc, ...validActions];
+    const mountActionPromises = rawActions.reduce((acc, rawAction) => {
+      return [...acc, ...getMountActionPromises(rawAction)];
     }, []);
-    await Promise.all(
-      actions.map(({ method, relativePath, module }) => {
-        return (async () => {
-          const handler = module[method];
-          const routerHandler = await createDefaultRouterHandler({
-            relativePath,
-            handler,
-            argTypes: module.argTypes,
-            defaultArgs: module.defaultArgs,
-          });
-          router[method.toLowerCase()](relativePath, routerHandler);
-          logger.info('Mount router', method, relativePath);
-        })();
-      })
-    );
+    await Promise.all(mountActionPromises);
+
+    if (process.env.NODE_ENV === 'development') {
+      watch(actionsBase, (event, filePath) => {
+        // todo
+        if (router.stack) {
+        }
+        console.log(event, filePath);
+      });
+    }
   },
   handler: router.routes(),
   router,
