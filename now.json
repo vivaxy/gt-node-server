@@ -13,5 +13,8 @@
       "src": "/(.*)",
       "dest": "scripts/now.js"
     }
-  ]
+  ],
+  "env": {
+    "DISABLE_FS": "true"
+  }
 }
