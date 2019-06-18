@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "scripts/now.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "scripts/now.js"
+    }
+  ]
+}

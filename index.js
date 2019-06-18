@@ -3,9 +3,15 @@
  * @author vivaxy
  */
 
-(async () => {
+(async function() {
   try {
-    await require('./lib/server')();
+    const { port } = require('../configs/server.js');
+    const logger = require('./get_logger.js')('server');
+
+    const koaApp = await require('./lib/server')();
+    const PORT = Number(process.env.PORT) || port;
+    koaApp.listen(PORT);
+    logger.info('Server started on', PORT);
   } catch (ex) {
     console.error(ex);
   }
