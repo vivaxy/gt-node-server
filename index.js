@@ -5,8 +5,8 @@
 
 (async function() {
   try {
-    const { port } = require('../configs/server.js');
-    const logger = require('./get_logger.js')('server');
+    const { port } = require('./configs/server.js');
+    const logger = require('./lib/get_logger.js')('server');
 
     const koaApp = await require('./lib/server')();
     const PORT = Number(process.env.PORT) || port;
