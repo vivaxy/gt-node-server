@@ -222,14 +222,14 @@ function getMountActionPromises({ relativePath, absolutePath, module }) {
 }
 
 module.exports = {
-  async init() {
+  async init(options = {}) {
     const rawActions = await getActions();
     const mountActionPromises = rawActions.reduce((acc, rawAction) => {
       return [...acc, ...getMountActionPromises(rawAction)];
     }, []);
     await Promise.all(mountActionPromises);
 
-    if (process.env.NODE_ENV === 'development') {
+    if (options.watch) {
       watch(actionsBase, (event, filePath) => {
         // todo
         if (router.stack) {

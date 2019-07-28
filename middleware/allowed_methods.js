@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-const router = require('./routers.js').router;
+const router = require('./actions_by_routers.js').router;
 
 module.exports = {
   init() {},
