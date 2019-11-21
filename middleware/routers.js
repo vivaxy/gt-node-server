@@ -101,10 +101,11 @@ router.get(`/${nodeServerInner}/node-server.js`, async (ctx, next) => {
 });
 
 async function createDefaultRouterHandler({ relativePath, handler }) {
-  return async (ctx) => {
+  return async (ctx, next) => {
     ctx.routers = {
       relativePath,
     };
+    await next();
     try {
       const body = await handler(ctx);
       ctx.status = httpStatusCodes.OK;

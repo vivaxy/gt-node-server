@@ -3,6 +3,9 @@
  * @author vivaxy
  * @requires ./routers.js
  */
+const path = require('path');
+
+const httpMethods = require('../configs/http_methods');
 const ArgTypes = require('../lib/arg_types');
 
 function getArgs(ctx) {
@@ -22,7 +25,7 @@ module.exports = {
     }
     const { argTypes, defaultArgs } = require(path.join(
       '..',
-      '..',
+      'actions',
       ctx.routers.relativePath
     ));
     const args = getArgs(ctx);

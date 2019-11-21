@@ -4,5 +4,7 @@
  */
 module.exports = {
   init() {},
-  handler() {},
+  async handler(ctx, next) {
+    await next();
+  },
 };

@@ -8,6 +8,7 @@ const ejs = require('ejs');
 const fse = require('fs-extra');
 
 const ejsExt = '.ejs';
+const pathToRender = {};
 
 async function getRender(relativePath) {
   const pageRendererFile = path.join(
@@ -29,15 +30,14 @@ async function getRender(relativePath) {
 module.exports = {
   init() {},
   async handler(ctx, next) {
-    if (!ctx.router.relativePath) {
+    if (!ctx.routers) {
       throw new Error('Requires ./routers');
     }
-    if (!pathToRender[ctx.router.relativePath]) {
-      pathToRender[ctx.router.relativePath] = await getRender(
-        ctx.router.relativePath
-      );
+    const { relativePath } = ctx.routers;
+    if (!pathToRender[relativePath]) {
+      pathToRender[relativePath] = await getRender(relativePath);
     }
-    ctx.render = pathToRender[ctx.router.relativePath];
+    ctx.render = pathToRender[ctx.routers.relativePath];
     await next();
   },
 };
