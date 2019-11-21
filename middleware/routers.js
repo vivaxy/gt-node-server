@@ -2,27 +2,21 @@
  * @since 2017-01-28 19:02
  * @author vivaxy
  */
-
 const fs = require('fs');
-const ejs = require('ejs');
 const http = require('http');
 const path = require('path');
-const fse = require('fs-extra');
 const glob = require('fast-glob');
 const Router = require('koa-router');
 
-const watch = require('../lib/watch.js');
-const ArgTypes = require('../lib/arg_types.js');
-const getLogger = require('../lib/get_logger.js');
-const ServerError = require('../lib/server_error.js');
-const httpMethods = require('../configs/http_methods.js');
-const { projectBase, nodeServerInner } = require('../configs/paths.js');
-const httpStatusCodes = require('../configs/http_status_codes.js');
+const getLogger = require('../lib/get_logger');
+const ServerError = require('../lib/server_error');
+const httpMethods = require('../configs/http_methods');
+const httpStatusCodes = require('../configs/http_status_codes');
+const { projectBase, nodeServerInner } = require('../configs/paths');
 
 const router = new Router();
 const logger = getLogger('middleware:router');
 const jsExt = '.js';
-const ejsExt = '.ejs';
 const actionsBase = path.join(__dirname, '..', 'actions');
 
 function getRelativePath(absolutePath) {
@@ -106,61 +100,13 @@ router.get(`/${nodeServerInner}/node-server.js`, async (ctx, next) => {
   await next();
 });
 
-function getArgs(ctx) {
-  switch (ctx.request.method) {
-    case httpMethods.GET:
-      return { ...ctx.request.query, ...ctx.request.params };
-    case httpMethods.POST:
-      return { ...ctx.request.params, ...ctx.request.body };
-  }
-}
-
-async function getRender(relativePath) {
-  const pageRendererFile = path.join(
-    __dirname,
-    '..',
-    'views',
-    relativePath + ejsExt
-  );
-  const fileExists = await fse.pathExists(pageRendererFile);
-  if (fileExists) {
-    const fileContent = await fse.readFile(pageRendererFile, 'utf8');
-    return ejs.compile(fileContent, {});
-  }
-  return () => {
-    throw new Error('Missing view for: ' + relativePath);
-  };
-}
-
-async function createDefaultRouterHandler({
-  relativePath,
-  handler,
-  argTypes,
-  defaultArgs = {},
-}) {
-  const logger = getLogger(relativePath);
-  const render = await getRender(relativePath);
-
+async function createDefaultRouterHandler({ relativePath, handler }) {
   return async (ctx) => {
-    const args = getArgs(ctx);
-    if (argTypes) {
-      try {
-        ArgTypes.check(argTypes, args);
-      } catch (ex) {
-        ctx.status = httpStatusCodes.BAD_REQUEST;
-        ctx.body = ex.message;
-        return;
-      }
-    }
+    ctx.routers = {
+      relativePath,
+    };
     try {
-      const body = await handler({
-        args: ArgTypes.merge(args, defaultArgs),
-        logger,
-        render,
-        ServerError,
-        ArgTypes,
-        ctx,
-      });
+      const body = await handler(ctx);
       ctx.status = httpStatusCodes.OK;
       ctx.body = body;
     } catch (ex) {
@@ -171,7 +117,7 @@ async function createDefaultRouterHandler({
       }
       const status = httpStatusCodes.INTERNAL_SERVER_ERROR;
       ctx.status = status;
-      // todo render error page
+      // TODO: render error page
       if (process.env.NODE_ENV === 'production') {
         ctx.body = http.STATUS_CODES[status];
       } else {
@@ -212,8 +158,6 @@ function getMountActionPromises({ relativePath, absolutePath, module }) {
       const routerHandler = await createDefaultRouterHandler({
         relativePath,
         handler,
-        argTypes: module.argTypes,
-        defaultArgs: module.defaultArgs,
       });
       router[method.toLowerCase()](relativePath, routerHandler);
       logger.info('Mount router', method, relativePath);
@@ -222,21 +166,12 @@ function getMountActionPromises({ relativePath, absolutePath, module }) {
 }
 
 module.exports = {
-  async init(options = {}) {
+  async init() {
     const rawActions = await getActions();
     const mountActionPromises = rawActions.reduce((acc, rawAction) => {
       return [...acc, ...getMountActionPromises(rawAction)];
     }, []);
     await Promise.all(mountActionPromises);
-
-    if (options.watch) {
-      watch(actionsBase, (event, filePath) => {
-        // todo
-        if (router.stack) {
-        }
-        console.log(event, filePath);
-      });
-    }
   },
   handler: router.routes(),
   router,

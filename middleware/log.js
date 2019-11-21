@@ -2,8 +2,7 @@
  * @since 2016-12-07 20:23
  * @author vivaxy
  */
-
-const logger = require('../lib/get_logger.js')('middleware:log');
+const logger = require('../lib/get_logger')('middleware:log');
 
 function getTimeStamp() {
   return new Date().getTime();

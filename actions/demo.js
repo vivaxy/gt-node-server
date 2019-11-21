@@ -1,9 +1,9 @@
 const ArgTypes = require('../lib/arg_types.js');
 
-exports.get = function get({ args, render }) {
-  return render({
+exports.get = function get(ctx) {
+  return ctx.render({
     title: 'Demo',
-    args,
+    args: ctx.args,
   });
 };
 

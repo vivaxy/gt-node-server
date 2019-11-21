@@ -8,10 +8,10 @@ const sleep = (timeout) => {
   });
 };
 
-exports.get = async function get({ logger }) {
-  logger.debug('long time start');
+exports.get = async function get(ctx) {
+  ctx.logger.debug('long time start');
   await sleep(10000);
-  logger.debug('long time end');
+  ctx.logger.debug('long time end');
   return {
     code: 0,
   };
