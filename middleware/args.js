@@ -1,7 +1,6 @@
 /**
  * @since 2019-11-21 04:30
  * @author vivaxy
- * @requires ./routers.js
  */
 const path = require('path');
 
@@ -21,7 +20,7 @@ module.exports = {
   init() {},
   async handler(ctx, next) {
     if (!ctx.routers) {
-      throw new Error('Requires ./router.js');
+      throw new Error('Requires ./router');
     }
     const { argTypes, defaultArgs } = require(path.join(
       '..',

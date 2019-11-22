@@ -13,6 +13,6 @@
     koaApp.listen(PORT);
     logger.info('Server started on', PORT);
   } catch (ex) {
-    console.error(ex);
+    console.error(ex.stack);
   }
 })();

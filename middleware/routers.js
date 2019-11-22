@@ -100,7 +100,7 @@ router.get(`/${nodeServerInner}/node-server.js`, async (ctx, next) => {
   await next();
 });
 
-async function createDefaultRouterHandler({ relativePath, handler }) {
+function createDefaultRouterHandler({ relativePath, handler }) {
   return async (ctx, next) => {
     ctx.routers = {
       relativePath,
@@ -137,7 +137,7 @@ function handleUppercaseExports({ relativePath, module }) {
   });
 }
 
-function getMountActionPromises({ relativePath, absolutePath, module }) {
+function getMountActionPromises({ relativePath, module }) {
   const methods = [
     ...Object.keys(httpMethods).map((method) => method.toLowerCase()),
     'use',
@@ -153,16 +153,14 @@ function getMountActionPromises({ relativePath, absolutePath, module }) {
       module,
     };
   });
-  return validActions.map(({ method, relativePath, module }) => {
-    return (async () => {
-      const handler = module[method];
-      const routerHandler = await createDefaultRouterHandler({
-        relativePath,
-        handler,
-      });
-      router[method.toLowerCase()](relativePath, routerHandler);
-      logger.info('Mount router', method, relativePath);
-    })();
+  return validActions.map(async ({ method, relativePath, module }) => {
+    const handler = module[method];
+    const routerHandler = createDefaultRouterHandler({
+      relativePath,
+      handler,
+    });
+    router[method.toLowerCase()](relativePath, routerHandler);
+    logger.info('Mount router', method, relativePath);
   });
 }
 

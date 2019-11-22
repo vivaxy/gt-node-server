@@ -1,7 +1,6 @@
 /**
  * @since 2019-11-21 03:50
  * @author vivaxy
- * @requires ./router.js
  */
 const path = require('path');
 const ejs = require('ejs');
