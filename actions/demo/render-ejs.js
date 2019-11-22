@@ -4,7 +4,7 @@
  */
 exports.get = async function get(ctx) {
   return ctx.render({
-    title: 'HTML Title',
+    title: 'Render EJS',
     name: 'vivaxy',
     age: 18,
   });
