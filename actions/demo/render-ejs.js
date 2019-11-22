@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 exports.get = async function get(ctx) {
-  return ctx.render({
+  return ctx.renderEJS({
     title: 'Render EJS',
     name: 'vivaxy',
     age: 18,

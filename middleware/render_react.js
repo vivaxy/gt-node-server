@@ -1,10 +1,13 @@
 /**
- * @since 2019-11-21 03:50
+ * @since 2019-07-28 20:52:34
  * @author vivaxy
  */
 const path = require('path');
+
+const React = require('react');
 const fse = require('fs-extra');
 const ejs = require('ejs-stream2');
+const ReactDOMServer = require('react-dom/server');
 
 const ejsExt = '.ejs';
 const pathToRender = {};
@@ -28,7 +31,7 @@ async function getRender(relativePath) {
 
 module.exports = {
   init() {},
-  handler: async function renderEJS(ctx, next) {
+  handler: async function renderReact(ctx, next) {
     if (!ctx.routers) {
       await next();
       return;
@@ -37,9 +40,18 @@ module.exports = {
     if (!pathToRender[relativePath]) {
       pathToRender[relativePath] = await getRender(relativePath);
     }
-    ctx.renderEJS = function(data) {
+    ctx.renderReact = function(data) {
       ctx.set('Content-Type', 'text/html');
-      return pathToRender[ctx.routers.relativePath](data);
+      const reactStream = ReactDOMServer.renderToNodeStream(
+        React.createElement('div', { className: 'root' }, 'haha')
+      );
+      return pathToRender[relativePath]({
+        ...data,
+        STYLES: '<link rel="stylesheet" href="style.css">',
+        SCRIPTS: '<script src="scripts.js"></script>',
+        HTML: reactStream,
+        DUMP: JSON.stringify({}),
+      });
     };
     await next();
   },

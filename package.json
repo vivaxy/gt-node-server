@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "release": "standard-version && git push --follow-tags",
-    "start": "NODE_ENV=production next build && NODE_ENV=production pm2 start index.js",
-    "update": "NODE_ENV=production next build && NODE_ENV=production pm2 update",
+    "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js",
-    "precommit": "npm run test && lint-staged"
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -28,15 +27,15 @@
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
     "chokidar": "^3.3.0",
-    "ejs": "^2.6.1",
+    "ejs-stream2": "^1.0.1",
     "fast-glob": "^3.1.0",
     "fs-extra": "^8.0.1",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
     "log4js": "^3.0.5",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",

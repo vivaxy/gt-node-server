@@ -18,9 +18,10 @@ function getArgs(ctx) {
 
 module.exports = {
   init() {},
-  async handler(ctx, next) {
+  handler: async function args(ctx, next) {
     if (!ctx.routers) {
-      throw new Error('Requires ./router');
+      await next();
+      return;
     }
     const { argTypes, defaultArgs } = require(path.join(
       '..',

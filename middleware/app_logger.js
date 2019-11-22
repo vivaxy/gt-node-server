@@ -18,7 +18,7 @@ function stringify(body = {}) {
     return body;
   }
   if (typeof body.pipe === 'function') {
-    return '[object stream]';
+    return '[object Stream]';
   }
   try {
     return JSON.stringify(body, (k, v) => {
@@ -43,7 +43,7 @@ function format(body = {}) {
 
 module.exports = {
   init() {},
-  async handler(ctx, next) {
+  handler: async function appLogger(ctx, next) {
     const request = ctx.request;
 
     logger.info(

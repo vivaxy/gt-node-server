@@ -6,7 +6,7 @@ const getLogger = require('../lib/get_logger');
 
 module.exports = {
   init() {},
-  async handler(ctx, next) {
+  handler: async function logger(ctx, next) {
     if (!ctx.router) {
       throw new Error('Requires ./router');
     }
