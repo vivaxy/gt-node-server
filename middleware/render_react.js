@@ -3,7 +3,6 @@
  * @author vivaxy
  */
 const path = require('path');
-
 const React = require('react');
 const fse = require('fs-extra');
 const ejs = require('ejs-stream2');
@@ -42,6 +41,8 @@ module.exports = {
     }
     ctx.renderReact = function(data) {
       ctx.set('Content-Type', 'text/html');
+      // TODO: require server bundle
+      // TODO: start webpack-dev-middleware
       const reactStream = ReactDOMServer.renderToNodeStream(
         React.createElement('div', { className: 'root' }, 'haha')
       );
