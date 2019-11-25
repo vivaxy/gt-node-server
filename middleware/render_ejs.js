@@ -33,11 +33,11 @@ module.exports = {
       await next();
       return;
     }
-    const { relativePath } = ctx.routers;
-    if (!pathToRender[relativePath]) {
-      pathToRender[relativePath] = await getRender(relativePath);
-    }
-    ctx.renderEJS = function(data) {
+    ctx.renderEJS = async function(data) {
+      const { relativePath } = ctx.routers;
+      if (!pathToRender[relativePath]) {
+        pathToRender[relativePath] = await getRender(relativePath);
+      }
       ctx.set('Content-Type', 'text/html');
       return pathToRender[ctx.routers.relativePath](data);
     };

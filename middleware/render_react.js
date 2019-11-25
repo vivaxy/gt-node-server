@@ -35,16 +35,20 @@ module.exports = {
       await next();
       return;
     }
-    const { relativePath } = ctx.routers;
-    if (!pathToRender[relativePath]) {
-      pathToRender[relativePath] = await getRender(relativePath);
-    }
-    ctx.renderReact = function(data) {
+
+    ctx.renderReact = async function(data) {
+      const { relativePath } = ctx.routers;
+      if (!pathToRender[relativePath]) {
+        pathToRender[relativePath] = await getRender(relativePath);
+      }
+
       ctx.set('Content-Type', 'text/html');
-      // TODO: require server bundle
+
+      const App = require(path.join('..', 'build', 'server', relativePath))
+        .default;
       // TODO: start webpack-dev-middleware
       const reactStream = ReactDOMServer.renderToNodeStream(
-        React.createElement('div', { className: 'root' }, 'haha')
+        React.createElement(App)
       );
       return pathToRender[relativePath]({
         ...data,

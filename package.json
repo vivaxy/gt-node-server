@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "release": "standard-version && git push --follow-tags",
+    "build:client": "webpack",
+    "build:server": "babel pages -d build/server",
+    "build": "yarn build:client && build:server",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js",
     "precommit": "lint-staged"
@@ -38,6 +41,7 @@
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
@@ -48,7 +52,8 @@
     "husky": "^0.14.3",
     "lint-staged": "^9.4.3",
     "prettier": "^1.14.2",
-    "standard-version": "^7.0.1"
+    "standard-version": "^7.0.1",
+    "webpack": "^4.41.2"
   },
   "lint-staged": {
     "**/**.{js,json,pcss,md}": [

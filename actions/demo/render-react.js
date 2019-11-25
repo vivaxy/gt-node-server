@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 exports.get = async function get(ctx) {
-  return ctx.renderReact({
+  return await ctx.renderReact({
     title: 'Title',
   });
 };
