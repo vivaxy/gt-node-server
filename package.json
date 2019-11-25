@@ -6,8 +6,8 @@
   "scripts": {
     "release": "standard-version && git push --follow-tags",
     "build:client": "rm -rf build/client && webpack",
-    "build:server": "rm -rf build/server && babel pages -d build/server --config-file ./babel.config.server.js",
-    "build": "yarn build:client && build:server",
+    "build:server": "rm -rf build/server && babel app -d build/server --config-file ./babel.config.server.js",
+    "build": "yarn build:client && yarn build:server",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js",
     "precommit": "lint-staged"
@@ -38,24 +38,25 @@
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "log4js": "^3.0.5",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "^16.12.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "husky": "^0.14.3",
     "lint-staged": "^9.4.3",
     "prettier": "^1.14.2",
+    "react-dom": "^16.12.0",
     "standard-version": "^7.0.1",
-    "webpack": "^4.41.2"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "lint-staged": {
     "**/**.{js,json,pcss,md}": [
