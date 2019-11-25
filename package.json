@@ -6,7 +6,7 @@
   "scripts": {
     "release": "standard-version && git push --follow-tags",
     "build:client": "rm -rf build/client && webpack",
-    "build:server": "rm -rf build/server && babel pages -d build/server",
+    "build:server": "rm -rf build/server && babel pages -d build/server --config-file ./babel.config.server.js",
     "build": "yarn build:client && build:server",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js",
