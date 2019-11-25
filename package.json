@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
+    "@koa/router": "^8.0.2",
     "chokidar": "^3.3.0",
-    "ejs-stream2": "^1.0.1",
+    "ejs-stream2": "^1.0.2",
     "fast-glob": "^3.1.0",
     "fs-extra": "^8.0.1",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
-    "koa-router": "^7.4.0",
     "log4js": "^3.0.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"

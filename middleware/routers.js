@@ -6,7 +6,7 @@ const fs = require('fs');
 const http = require('http');
 const path = require('path');
 const glob = require('fast-glob');
-const Router = require('koa-router');
+const Router = require('@koa/router');
 
 const getLogger = require('../lib/get_logger');
 const ServerError = require('../lib/server_error');
