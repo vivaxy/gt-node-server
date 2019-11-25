@@ -9,8 +9,7 @@
     "build:server": "rm -rf build/server && babel app -d build/server --config-file ./babel.config.server.js",
     "build": "yarn build:client && yarn build:server",
     "start": "NODE_ENV=production node index.js",
-    "dev": "NODE_ENV=development node index.js",
-    "precommit": "lint-staged"
+    "dev": "NODE_ENV=development node index.js"
   },
   "repository": {
     "type": "git",
@@ -68,5 +67,10 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
