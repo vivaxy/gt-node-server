@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "release": "standard-version && git push --follow-tags",
-    "build:client": "webpack",
-    "build:server": "babel pages -d build/server",
+    "build:client": "rm -rf build/client && webpack",
+    "build:server": "rm -rf build/server && babel pages -d build/server",
     "build": "yarn build:client && build:server",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js",
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
+    "@babel/runtime": "^7.7.4",
     "@koa/router": "^8.0.2",
     "chokidar": "^3.3.0",
     "ejs-stream2": "^1.0.2",
@@ -46,6 +47,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
     "babel-plugin-dynamic-import-node": "^2.2.0",
