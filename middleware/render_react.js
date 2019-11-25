@@ -3,7 +3,6 @@
  * @author vivaxy
  */
 const path = require('path');
-const React = require('react');
 const fse = require('fs-extra');
 const glob = require('fast-glob');
 const ejs = require('ejs-stream2');
@@ -65,18 +64,15 @@ module.exports = {
 
       ctx.set('Content-Type', 'text/html');
 
-      const App = require(path.join('..', 'build', 'server', relativePath))
-        .default;
+      const app = require(path.join('..', 'build', 'server', relativePath));
       // TODO: start webpack-dev-middleware
-      const reactStream = ReactDOMServer.renderToNodeStream(
-        React.createElement(App)
-      );
+      const reactStream = ReactDOMServer.renderToNodeStream(app.default);
       return pathToRender[relativePath]({
         ...data,
         STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
         SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
         HTML: reactStream,
-        DUMP: JSON.stringify({}),
+        DUMP: JSON.stringify(app.store.getState()),
       });
     };
     await next();

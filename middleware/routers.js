@@ -122,7 +122,7 @@ function createDefaultRouterHandler({ relativePath, handler }) {
       if (process.env.NODE_ENV === 'production') {
         ctx.body = http.STATUS_CODES[status];
       } else {
-        ctx.body = ex.stack;
+        ctx.body = `<pre>${ex.stack}</pre>`;
       }
     }
   };

@@ -2,34 +2,15 @@
  * @since 2019-11-25 11:38
  * @author vivaxy
  */
-import React, { Component } from 'react';
-import './index.css';
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
+import Button from './Button';
 
-export default class RenderReactApp extends Component {
-  state = {
-    text: 'Click me!',
-  };
+export default (
+  <Provider store={store}>
+    <Button />
+  </Provider>
+);
 
-  handleClick = () => {
-    this.setState(
-      {
-        text: 'Clicked',
-      },
-      () => {
-        setTimeout(() => {
-          this.setState({
-            text: 'Click me!',
-          });
-        }, 1000);
-      }
-    );
-  };
-
-  render() {
-    return (
-      <div className="render-react-root" onClick={this.handleClick}>
-        {this.state.text}
-      </div>
-    );
-  }
-}
+export { store };

@@ -31,14 +31,15 @@
   "dependencies": {
     "@babel/runtime": "^7.7.4",
     "@koa/router": "^8.0.2",
-    "chokidar": "^3.3.0",
     "ejs-stream2": "^1.0.2",
     "fast-glob": "^3.1.0",
     "fs-extra": "^8.0.1",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "log4js": "^3.0.5",
-    "react": "^16.12.0"
+    "react": "^16.12.0",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
@@ -52,7 +53,7 @@
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-transform-require-ignore": "^0.1.1",
     "css-loader": "^3.2.0",
-    "husky": "^0.14.3",
+    "husky": "^3.1.0",
     "lint-staged": "^9.4.3",
     "mini-css-extract-plugin": "^0.8.0",
     "prettier": "^1.14.2",

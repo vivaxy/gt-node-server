@@ -7,13 +7,14 @@ const glob = require('fast-glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 async function getEntries() {
-  const entries = await glob('**/index.js', {
+  const entries = await glob('**/*.js', {
     cwd: path.join(__dirname, 'client'),
   });
   return entries.reduce(function(ret, ent) {
     return {
       ...ret,
-      [path.dirname(ent)]: './' + path.join('client', ent),
+      [path.join(path.dirname(ent), path.basename(ent, path.extname(ent)))]:
+        './' + path.join('client', ent),
     };
   }, {});
 }
