@@ -32,7 +32,7 @@ async function getRender(relativePath) {
 module.exports = {
   init: async function initRenderReact() {
     // response static files
-    const files = await glob('**/*.js', {
+    const files = await glob('**/*.{js,css}', {
       cwd: path.join(__dirname, '..', 'build', 'client'),
     });
     this.staticFiles = {};
@@ -49,6 +49,7 @@ module.exports = {
     // response static files
     if (this.staticFiles[ctx.path]) {
       ctx.body = this.staticFiles[ctx.path];
+      ctx.type = path.extname(ctx.path);
     }
 
     if (!ctx.routers) {
@@ -72,8 +73,8 @@ module.exports = {
       );
       return pathToRender[relativePath]({
         ...data,
-        STYLES: '<link rel="stylesheet" href="/_build/index.css">',
-        SCRIPTS: '<script src="/_build' + relativePath + '.js"></script>',
+        STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
+        SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
         HTML: reactStream,
         DUMP: JSON.stringify({}),
       });

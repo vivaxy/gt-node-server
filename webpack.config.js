@@ -4,6 +4,7 @@
  */
 const path = require('path');
 const glob = require('fast-glob');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 async function getEntries() {
   const entries = await glob('**/index.js', {
@@ -46,7 +47,26 @@ module.exports = async function() {
             configFile: path.join(__dirname, 'babel.config.client.js'),
           },
         },
+        {
+          test: /\.css$/i,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                hmr: process.env.NODE_ENV === 'development',
+              },
+            },
+            'css-loader',
+          ],
+        },
       ],
     },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+        ignoreOrder: false,
+      }),
+    ],
   };
 };
