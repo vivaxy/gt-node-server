@@ -27,11 +27,15 @@ Steps to make contributions
 
 A node server
 
+## Design Mindmap
+
+![Design Mindmap](./docs/assets/design-mindmap.svg)
+
 ## Feature
 
-- log4js as logger
-- pm2 process manage
-- Support in nodejs > v6.10.0, npm > 5
+- React SSR
+- EJS template
+- log4js logger
 
 ## Develop
 
