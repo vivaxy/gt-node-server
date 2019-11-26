@@ -32,7 +32,7 @@ module.exports = async function() {
     mode: getMode(),
     entry: entries,
     output: {
-      path: path.join(__dirname, 'build', 'client'),
+      path: path.join(__dirname, 'build_client'),
       filename: '[name].js',
     },
     module: {

@@ -7,10 +7,10 @@ const getLogger = require('../lib/get_logger');
 module.exports = {
   init() {},
   handler: async function logger(ctx, next) {
-    if (!ctx.router) {
-      throw new Error('Requires ./router');
+    if (ctx._matchedRoute) {
+      ctx.logger = getLogger(ctx._matchedRoute);
     }
-    ctx.logger = getLogger(ctx.router.relativePath);
+
     await next();
   },
 };

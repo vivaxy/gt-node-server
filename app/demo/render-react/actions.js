@@ -4,9 +4,7 @@
  */
 export const CLICK = 'CLICK';
 export const RESET = 'RESET';
-export const FETCH_START = 'FETCH_START';
-export const FETCH_SUCCESS = 'FETCH_SUCCESS';
-export const FETCH_ERROR = 'FETCH_ERROR';
+export const SET_FETCHED_DATA = 'SET_FETCHED_DATA';
 
 export function click() {
   return {
@@ -20,21 +18,9 @@ export function reset() {
   };
 }
 
-export function fetchStart() {
+export function setFetchedData(payload) {
   return {
-    type: FETCH,
-  };
-}
-
-export function fetchSuccess(data) {
-  return {
-    type: FETCH_SUCCESS,
-    payload: data,
-  };
-}
-
-export function fetchError() {
-  return {
-    type: FETCH_ERROR,
+    type: SET_FETCHED_DATA,
+    payload,
   };
 }

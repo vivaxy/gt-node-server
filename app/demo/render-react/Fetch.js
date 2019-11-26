@@ -5,20 +5,11 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 
-import fetch from '../../../lib/fetch';
-import { fetchStart } from './actions';
+import { setFetchedData } from './actions';
 
 class Fetch extends Component {
-  static async getInitialProps(ctx) {
-    const {} = await fetch({ req: ctx.req, path: '/demo/render-react-id' });
-  }
-
-  componentDidMount() {
-    this.props.fetchStart();
-  }
-
   render() {
-    return <p>{this.props.fetchedData}</p>;
+    return <p>{JSON.stringify(this.props.fetchedData)}</p>;
   }
 }
 
@@ -28,6 +19,6 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = { fetchStart };
+const mapDispatchToProps = { setFetchedData };
 
-export default connect(mapStateToProps, mapDispatchToProps, Fetch);
+export default connect(mapStateToProps, mapDispatchToProps)(Fetch);

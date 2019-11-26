@@ -4,14 +4,15 @@
  */
 const path = require('path');
 
-const httpMethods = require('../configs/http_methods');
 const ArgTypes = require('../lib/arg_types');
+const HTTP_METHODS = require('../configs/http_methods');
+const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 
 function getArgs(ctx) {
   switch (ctx.request.method) {
-    case httpMethods.GET:
+    case HTTP_METHODS.GET:
       return { ...ctx.request.query, ...ctx.request.params };
-    case httpMethods.POST:
+    case HTTP_METHODS.POST:
       return { ...ctx.request.params, ...ctx.request.body };
   }
 }
@@ -19,21 +20,21 @@ function getArgs(ctx) {
 module.exports = {
   init() {},
   handler: async function args(ctx, next) {
-    if (!ctx.routers) {
+    if (!ctx._matchedRoute) {
       await next();
       return;
     }
     const { argTypes, defaultArgs } = require(path.join(
       '..',
       'actions',
-      ctx.routers.relativePath
+      ctx._matchedRoute
     ));
     const args = getArgs(ctx);
     if (argTypes) {
       try {
         ArgTypes.check(argTypes, args);
       } catch (ex) {
-        ctx.status = httpStatusCodes.BAD_REQUEST;
+        ctx.status = HTTP_STATUS_CODES.BAD_REQUEST;
         ctx.body = ex.message;
         return;
       }

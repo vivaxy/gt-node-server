@@ -2,17 +2,13 @@
  * @since 2017-01-28 19:02
  * @author vivaxy
  */
-const fs = require('fs');
-const http = require('http');
 const path = require('path');
 const glob = require('fast-glob');
 const Router = require('@koa/router');
 
 const getLogger = require('../lib/get_logger');
-const ServerError = require('../lib/server_error');
 const httpMethods = require('../configs/http_methods');
-const httpStatusCodes = require('../configs/http_status_codes');
-const { projectBase, nodeServerInner } = require('../configs/paths');
+const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 
 const router = new Router();
 const logger = getLogger('middleware:router');
@@ -63,71 +59,6 @@ async function getActions() {
   });
 }
 
-router.get(`/${nodeServerInner}/react.js`, async (ctx, next) => {
-  ctx.body = fs.createReadStream(
-    path.join(
-      projectBase,
-      'node_modules',
-      'react',
-      'umd',
-      process.env.NODE_ENV === 'production'
-        ? 'react.production.min.js'
-        : 'react.development.js'
-    )
-  );
-  ctx.set('Content-Type', 'text/javascript');
-  await next();
-});
-router.get(`/${nodeServerInner}/react-dom.js`, async (ctx, next) => {
-  ctx.body = fs.createReadStream(
-    path.join(
-      projectBase,
-      'node_modules',
-      'react-dom',
-      'umd',
-      process.env.NODE_ENV === 'production'
-        ? 'react-dom.production.min.js'
-        : 'react-dom.development.js'
-    )
-  );
-  ctx.set('Content-Type', 'text/javascript');
-  await next();
-});
-router.get(`/${nodeServerInner}/node-server.js`, async (ctx, next) => {
-  ctx.body = `// todo previous scripts, get element and container
-// ReactDOM.hydrate(element, container);`;
-  ctx.set('Content-Type', 'text/javascript');
-  await next();
-});
-
-function createDefaultRouterHandler({ relativePath, handler }) {
-  return async (ctx, next) => {
-    ctx.routers = {
-      relativePath,
-    };
-    await next();
-    try {
-      const body = await handler(ctx);
-      ctx.status = httpStatusCodes.OK;
-      ctx.body = body;
-    } catch (ex) {
-      if (ex instanceof ServerError) {
-        ctx.status = ex.status;
-        ctx.body = ex.message;
-        return;
-      }
-      const status = httpStatusCodes.INTERNAL_SERVER_ERROR;
-      ctx.status = status;
-      // TODO: render error page
-      if (process.env.NODE_ENV === 'production') {
-        ctx.body = http.STATUS_CODES[status];
-      } else {
-        ctx.body = `<pre>${ex.stack}</pre>`;
-      }
-    }
-  };
-}
-
 function handleUppercaseExports({ relativePath, module }) {
   const methods = Object.keys(httpMethods);
   methods.forEach((method) => {
@@ -155,10 +86,12 @@ function getMountActionPromises({ relativePath, module }) {
   });
   return validActions.map(async ({ method, relativePath, module }) => {
     const handler = module[method];
-    const routerHandler = createDefaultRouterHandler({
-      relativePath,
-      handler,
-    });
+    const routerHandler = async function(ctx, next) {
+      await next();
+      const body = await handler(ctx);
+      ctx.status = HTTP_STATUS_CODES.OK;
+      ctx.body = body;
+    };
     router[method.toLowerCase()](relativePath, routerHandler);
     logger.info('Mount router', method, relativePath);
   });

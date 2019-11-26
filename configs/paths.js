@@ -10,4 +10,3 @@ const logDirectory = path.join(projectBase, 'logs');
 
 exports.projectBase = projectBase;
 exports.logFile = path.join(logDirectory, 'default.log');
-exports.nodeServerInner = '__node-server';

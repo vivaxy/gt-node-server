@@ -29,17 +29,17 @@ async function getRender(relativePath) {
 module.exports = {
   init() {},
   handler: async function renderEJS(ctx, next) {
-    if (!ctx.routers) {
+    if (!ctx._matchedRoute) {
       await next();
       return;
     }
     ctx.renderEJS = async function(data) {
-      const { relativePath } = ctx.routers;
-      if (!pathToRender[relativePath]) {
-        pathToRender[relativePath] = await getRender(relativePath);
+      const matchedRoute = ctx._matchedRoute;
+      if (!pathToRender[matchedRoute]) {
+        pathToRender[matchedRoute] = await getRender(matchedRoute);
       }
       ctx.set('Content-Type', 'text/html');
-      return pathToRender[ctx.routers.relativePath](data);
+      return pathToRender[matchedRoute](data);
     };
     await next();
   },

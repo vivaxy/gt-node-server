@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "release": "standard-version && git push --follow-tags",
-    "build:client": "rm -rf build/client && webpack",
-    "build:server": "rm -rf build/server && babel app -d build/server --config-file ./babel.config.server.js",
+    "build:client": "rm -rf build_client && webpack",
+    "build:server": "rm -rf build_server && babel app -d build_server --config-file ./babel.config.server.js",
     "build": "yarn build:client && yarn build:server",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js"
@@ -35,6 +35,7 @@
     "fs-extra": "^8.0.1",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
+    "koa-compose": "^4.1.0",
     "log4js": "^3.0.5",
     "react": "^16.12.0",
     "react-redux": "^7.1.3",
