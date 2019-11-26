@@ -6,5 +6,11 @@ const koaBody = require('koa-body');
 
 module.exports = {
   init() {},
-  handler: koaBody({ multipart: true }),
+  handler: async function bodyParser(ctx, next) {
+    if (!ctx.__simulated) {
+      await koaBody({ multipart: true })(ctx, next);
+    } else {
+      await next();
+    }
+  },
 };

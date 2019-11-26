@@ -85,11 +85,21 @@ module.exports = {
             ctx.req,
             new http.ServerResponse({})
           );
+          fetchCtx.__simulated = true;
           fetchCtx.path = path;
           fetchCtx.method = method;
-          if (fetchCtx.method === HTTP_METHODS.GET) {
+          if (headers) {
+            Object.keys(headers).forEach(function(headerKey) {
+              fetchCtx.set(headerKey, headers[headerKey]);
+            });
+          }
+          if (
+            fetchCtx.method === HTTP_METHODS.GET ||
+            fetchCtx.method === HTTP_METHODS.HEAD
+          ) {
             fetchCtx.query = data;
           } else if (fetchCtx.method === HTTP_METHODS.POST) {
+            // bodyparser will try to read body according to the content-type and content-length
             fetchCtx.request.body = data;
           } else {
             throw new Error('Fetch method not supported: ' + method);

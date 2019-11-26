@@ -30,5 +30,5 @@ export async function initialize(ctx) {
       seq: 42,
     },
   });
-  store.dispatch(actions.setFetchedData(data));
+  store.dispatch(actions.setFetchedData(data.data.args));
 }

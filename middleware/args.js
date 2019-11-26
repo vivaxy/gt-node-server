@@ -11,9 +11,10 @@ const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 function getArgs(ctx) {
   switch (ctx.request.method) {
     case HTTP_METHODS.GET:
-      return { ...ctx.request.query, ...ctx.request.params };
+    case HTTP_METHODS.HEAD:
+      return { ...ctx.query, ...ctx.params };
     case HTTP_METHODS.POST:
-      return { ...ctx.request.params, ...ctx.request.body };
+      return { ...ctx.params, ...ctx.request.body };
   }
 }
 

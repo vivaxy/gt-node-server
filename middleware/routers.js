@@ -89,7 +89,6 @@ function getMountActionPromises({ relativePath, module }) {
     const routerHandler = async function(ctx, next) {
       await next();
       const body = await handler(ctx);
-      ctx.status = HTTP_STATUS_CODES.OK;
       ctx.body = body;
     };
     router[method.toLowerCase()](relativePath, routerHandler);
