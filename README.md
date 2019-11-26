@@ -27,20 +27,34 @@ Steps to make contributions
 
 A node server
 
-## Design Mindmap
-
-![Design Mindmap](./docs/assets/design-mindmap.svg)
-
 ## Feature
 
 - React SSR
 - EJS template
 - log4js logger
 
+## Design Mindmap
+
+![Design Mindmap](./docs/assets/design-mindmap.svg)
+
 ## Develop
 
 - `npm run dev`
 - Open in browser `http://127.0.0.1:8080`
+
+### Render React
+
+SSR: `http://127.0.0.1:8080/demo/render-react?ssr=1`
+CSR: `http://127.0.0.1:8080/demo/render-react`
+
+### API
+
+`curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"` =>
+`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"},"args":{"id":"3"}}}`
+
+## Deploy
+
+- `npm start`
 
 ## Guides
 
@@ -67,14 +81,3 @@ exports.post = function post({ args, httpStatusCodes }) {
   }
 }
 ```
-
-## Render React
-
-SSR: `http://127.0.0.1:8080/demo/render-react?ssr=1`
-CSR: `http://127.0.0.1:8080/demo/render-react`
-
-## Deploy
-
-- `npm start`
-- `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'id=3' "http://127.0.0.1:8080/demo/1?id=2"`
-`> {"code":0,"data":{"body":{"id":"3"},"query":{"id":"2"},"params":{"id":"1"},"args":{"id":"3"}}}`
