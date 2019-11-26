@@ -13,7 +13,7 @@ const initialState = {
 
 const store = createStore(
   reducers,
-  typeof window === 'undefined' ? initialState : window._STATE_ || initialState,
+  typeof window === 'undefined' ? initialState : window.__state || initialState,
   (typeof window !== 'undefined' &&
     window.__REDUX_DEVTOOLS_EXTENSION__ &&
     window.__REDUX_DEVTOOLS_EXTENSION__()) ||

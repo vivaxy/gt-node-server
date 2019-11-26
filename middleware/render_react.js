@@ -40,7 +40,7 @@ module.exports = {
         path.join(__dirname, '..', 'build', 'client', file),
         'utf8'
       );
-      const filename = path.join('_build', file);
+      const filename = path.join('__build', file);
       this.staticFiles['/' + filename] = content;
     });
   },
@@ -57,7 +57,7 @@ module.exports = {
     }
 
     ctx.renderReact = async function(options) {
-      const { ssr, ...data } = options;
+      const { __ssr: ssr, ...data } = options;
       const { relativePath } = ctx.routers;
       if (!pathToRender[relativePath]) {
         pathToRender[relativePath] = await getRender(relativePath);
@@ -71,18 +71,18 @@ module.exports = {
         const reactStream = ReactDOMServer.renderToNodeStream(app.default);
         return pathToRender[relativePath]({
           ...data,
-          STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
-          SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
-          HTML: reactStream,
-          STATE: JSON.stringify(app.getState()),
+          __styles: `<link rel="stylesheet" href="/__build${relativePath}.css">`,
+          __scripts: `<script src="/__build${relativePath}.js"></script>`,
+          __html: reactStream,
+          __state: JSON.stringify(app.getState()),
         });
       } else {
         return pathToRender[relativePath]({
           ...data,
-          STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
-          SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
-          HTML: '',
-          STATE: JSON.stringify(null),
+          __styles: `<link rel="stylesheet" href="/__build${relativePath}.css">`,
+          __scripts: `<script src="/__build${relativePath}.js"></script>`,
+          __html: '',
+          __state: JSON.stringify(null),
         });
       }
     };

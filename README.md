@@ -64,6 +64,11 @@ exports.post = function post({ args, httpStatusCodes }) {
 }
 ```
 
+## Render React
+
+SSR: `http://127.0.0.1:8080/demo/render-react?ssr=1`
+CSR: `http://127.0.0.1:8080/demo/render-react`
+
 ## Deploy
 
 - `npm start`
