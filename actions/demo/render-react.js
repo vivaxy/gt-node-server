@@ -4,6 +4,7 @@
  */
 exports.get = async function get(ctx) {
   return await ctx.renderReact({
-    title: 'Title',
+    title: 'Render React Demo',
+    ssr: false,
   });
 };

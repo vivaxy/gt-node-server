@@ -56,7 +56,8 @@ module.exports = {
       return;
     }
 
-    ctx.renderReact = async function(data) {
+    ctx.renderReact = async function(options) {
+      const { ssr, ...data } = options;
       const { relativePath } = ctx.routers;
       if (!pathToRender[relativePath]) {
         pathToRender[relativePath] = await getRender(relativePath);
@@ -64,16 +65,26 @@ module.exports = {
 
       ctx.set('Content-Type', 'text/html');
 
-      const app = require(path.join('..', 'build', 'server', relativePath));
-      // TODO: start webpack-dev-middleware
-      const reactStream = ReactDOMServer.renderToNodeStream(app.default);
-      return pathToRender[relativePath]({
-        ...data,
-        STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
-        SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
-        HTML: reactStream,
-        DUMP: JSON.stringify(app.store.getState()),
-      });
+      if (ssr) {
+        const app = require(path.join('..', 'build', 'server', relativePath));
+        // TODO: start webpack-dev-middleware
+        const reactStream = ReactDOMServer.renderToNodeStream(app.default);
+        return pathToRender[relativePath]({
+          ...data,
+          STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
+          SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
+          HTML: reactStream,
+          STATE: JSON.stringify(app.getState()),
+        });
+      } else {
+        return pathToRender[relativePath]({
+          ...data,
+          STYLES: `<link rel="stylesheet" href="/_build${relativePath}.css">`,
+          SCRIPTS: `<script src="/_build${relativePath}.js"></script>`,
+          HTML: '',
+          STATE: JSON.stringify(null),
+        });
+      }
     };
     await next();
   },

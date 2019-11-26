@@ -7,11 +7,13 @@ import reducers from './reducers';
 
 const initialState = {
   text: 'Click me!',
+  fetchLoading: false,
+  fetchedData: null,
 };
 
 const store = createStore(
   reducers,
-  typeof window === 'undefined' ? initialState : window._DUMP_ || initialState,
+  typeof window === 'undefined' ? initialState : window._STATE_ || initialState,
   (typeof window !== 'undefined' &&
     window.__REDUX_DEVTOOLS_EXTENSION__ &&
     window.__REDUX_DEVTOOLS_EXTENSION__()) ||

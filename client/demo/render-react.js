@@ -6,4 +6,8 @@ import ReactDOM from 'react-dom';
 
 import app from '../../app/demo/render-react';
 
-ReactDOM.hydrate(app, document.getElementById('_render_react_root_'));
+if (window._STATE_) {
+  ReactDOM.hydrate(app, document.getElementById('_render_react_root_'));
+} else {
+  ReactDOM.render(app, document.getElementById('_render_react_root_'));
+}

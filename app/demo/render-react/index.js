@@ -13,4 +13,4 @@ export default (
   </Provider>
 );
 
-export { store };
+export const getState = store.getState;

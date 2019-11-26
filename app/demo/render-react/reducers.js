@@ -16,6 +16,23 @@ export default function(state, action) {
         ...state,
         text: 'Click me!',
       };
+    case ACTION_TYPES.FETCH_START:
+      return {
+        ...state,
+        fetchLoading: true,
+      };
+    case ACTION_TYPES.FETCH_SUCCESS:
+      return {
+        ...state,
+        fetchLoading: false,
+        fetchedData: action.payload,
+      };
+    case ACTION_TYPES.FETCH_ERROR:
+      return {
+        ...state,
+        fetchLoading: false,
+        fetchedData: null,
+      };
     default:
       return state;
   }
