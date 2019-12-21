@@ -4,7 +4,6 @@
  */
 const ServerError = require('../lib/server_error');
 module.exports = {
-  init() {},
   handler: async function serverError(ctx, next) {
     ctx.ServerError = ServerError;
     await next();

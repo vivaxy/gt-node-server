@@ -12,7 +12,8 @@
       "program": "${workspaceFolder}/index.js",
       "env": {
         "NODE_ENV": "development"
-      }
+      },
+      "console": "integratedTerminal"
     }
   ]
 }

@@ -5,7 +5,6 @@
 const getLogger = require('../lib/get_logger');
 
 module.exports = {
-  init() {},
   handler: async function logger(ctx, next) {
     if (ctx._matchedRoute) {
       ctx.logger = getLogger(ctx._matchedRoute);

@@ -19,7 +19,6 @@ function getArgs(ctx) {
 }
 
 module.exports = {
-  init() {},
   handler: async function args(ctx, next) {
     if (!ctx._matchedRoute) {
       await next();

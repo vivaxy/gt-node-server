@@ -43,7 +43,6 @@ function format(body = {}) {
 }
 
 module.exports = {
-  init() {},
   handler: async function appLogger(ctx, next) {
     const request = ctx.request;
 

@@ -7,11 +7,11 @@ const glob = require('fast-glob');
 const Router = require('@koa/router');
 
 const getLogger = require('../lib/get_logger');
-const httpMethods = require('../configs/http_methods');
+const HTTP_METHODS = require('../configs/http_methods');
 const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 
 const router = new Router();
-const logger = getLogger('middleware:router');
+const logger = getLogger('middleware:routers');
 const jsExt = '.js';
 const actionsBase = path.join(__dirname, '..', 'actions');
 
@@ -60,7 +60,7 @@ async function getActions() {
 }
 
 function handleUppercaseExports({ relativePath, module }) {
-  const methods = Object.keys(httpMethods);
+  const methods = Object.keys(HTTP_METHODS);
   methods.forEach((method) => {
     if (module.hasOwnProperty(method)) {
       throw new Error(`Export lowercase method ${method} in ${relativePath}`);
@@ -70,7 +70,7 @@ function handleUppercaseExports({ relativePath, module }) {
 
 function getMountActionPromises({ relativePath, module }) {
   const methods = [
-    ...Object.keys(httpMethods).map((method) => method.toLowerCase()),
+    ...Object.keys(HTTP_METHODS).map((method) => method.toLowerCase()),
     'use',
   ];
   handleUppercaseExports({ relativePath, module });
@@ -87,7 +87,12 @@ function getMountActionPromises({ relativePath, module }) {
   return validActions.map(async ({ method, relativePath, module }) => {
     const handler = module[method];
     const routerHandler = async function(ctx, next) {
+      // run other middleware first
       await next();
+      if (ctx.status !== HTTP_STATUS_CODES.NOT_FOUND) {
+        // should not handle
+        return;
+      }
       const body = await handler(ctx);
       ctx.body = body;
     };

@@ -27,7 +27,6 @@ async function getRender(relativePath) {
 }
 
 module.exports = {
-  init() {},
   handler: async function renderEJS(ctx, next) {
     if (!ctx._matchedRoute) {
       await next();

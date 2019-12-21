@@ -5,6 +5,5 @@
 const router = require('./routers').router;
 
 module.exports = {
-  init() {},
   handler: router.allowedMethods(),
 };
