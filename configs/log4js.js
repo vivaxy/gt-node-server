@@ -2,7 +2,6 @@
  * @since 2016-10-04 13:41
  * @author vivaxy
  */
-
 const log4js = require('log4js');
 
 const { logFile } = require('./paths.js');
