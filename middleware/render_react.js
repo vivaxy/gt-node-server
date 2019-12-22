@@ -72,7 +72,7 @@ module.exports = {
 
       if (ssr) {
         const app = require(path.join(
-          '..',
+          PATHS.rootPath,
           PATHS.buildServerFolder,
           matchedRoute
         ));
