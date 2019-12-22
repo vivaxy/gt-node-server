@@ -4,8 +4,15 @@
  */
 const path = require('path');
 
-const projectBase = path.join(__dirname, '..');
-const logDirectory = path.join(projectBase, 'logs');
+const rootPath = path.join(__dirname, '..');
+const logDirectory = path.join(rootPath, 'logs');
 
-exports.projectBase = projectBase;
+exports.buildClientFolder = 'build_client';
+exports.buildServerFolder = 'build_server';
+exports.appFolder = 'app';
+exports.actionsFolder = 'actions';
+exports.viewsFolder = 'views';
+exports.serverClientRouter = '__build';
+
+exports.rootPath = rootPath;
 exports.logFile = path.join(logDirectory, 'default.log');

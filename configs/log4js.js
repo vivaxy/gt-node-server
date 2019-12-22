@@ -4,7 +4,7 @@
  */
 const log4js = require('log4js');
 
-const { logFile } = require('./paths.js');
+const paths = require('./paths.js');
 
 /**
  * log levels
@@ -24,7 +24,7 @@ module.exports = {
     console: { type: 'console' },
     dateFile: {
       type: 'dateFile',
-      filename: logFile,
+      filename: paths.logFile,
     },
     logLevelFilter: {
       type: 'logLevelFilter',
