@@ -6,24 +6,27 @@ const path = require('path');
 const glob = require('fast-glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const PATHS = require('./configs/paths');
+const NODE_ENV = require('./configs/node_env');
+
 async function getEntries() {
   const entries = await glob('**/*.js', {
-    cwd: path.join(__dirname, 'client'),
+    cwd: path.join(PATHS.rootPath, PATHS.clientFolder),
   });
   return entries.reduce(function(ret, ent) {
     return {
       ...ret,
       [path.join(path.dirname(ent), path.basename(ent, path.extname(ent)))]:
-        './' + path.join('client', ent),
+        './' + path.join(PATHS.clientFolder, ent),
     };
   }, {});
 }
 
 function getMode() {
-  if (process.env.NODE_ENV === 'production') {
-    return 'production';
+  if (process.env.NODE_ENV === NODE_ENV.PRODUCTION) {
+    return NODE_ENV.PRODUCTION;
   }
-  return 'development';
+  return NODE_ENV.DEVELOPMENT;
 }
 
 module.exports = async function() {
@@ -32,7 +35,7 @@ module.exports = async function() {
     mode: getMode(),
     entry: entries,
     output: {
-      path: path.join(__dirname, 'build_client'),
+      path: path.join(PATHS.rootPath, PATHS.buildClientFolder),
       filename: '[name].js',
     },
     module: {
@@ -40,12 +43,12 @@ module.exports = async function() {
         {
           test: /\.js$/,
           include: [
-            path.join(__dirname, 'app'),
-            path.join(__dirname, 'client'),
+            path.join(PATHS.rootPath, PATHS.appFolder),
+            path.join(PATHS.rootPath, PATHS.clientFolder),
           ],
           loader: 'babel-loader',
           options: {
-            configFile: path.join(__dirname, 'babel.config.client.js'),
+            configFile: path.join(PATHS.rootPath, PATHS.babelConfigClientFile),
           },
         },
         {
@@ -54,7 +57,7 @@ module.exports = async function() {
             {
               loader: MiniCssExtractPlugin.loader,
               options: {
-                hmr: process.env.NODE_ENV === 'development',
+                hmr: process.env.NODE_ENV === NODE_ENV.DEVELOPMENT,
               },
             },
             'css-loader',

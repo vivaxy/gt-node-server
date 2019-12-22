@@ -11,8 +11,9 @@ const e2k = require('express-to-koa');
 const createWebpackDevMiddleware = require('webpack-dev-middleware');
 
 const watch = require('../lib/watch');
-const paths = require('../configs/paths');
+const PATHS = require('../configs/paths');
 const getLogger = require('../lib/get_logger');
+const NODE_ENV = require('../configs/node_env');
 const webpackConfig = require('../webpack.config');
 
 const logger = getLogger('middleware:dev');
@@ -22,17 +23,17 @@ const buildStatus = {
   client: {},
 };
 
-const appPath = path.join(paths.rootPath, paths.appFolder);
-const buildServerPath = path.join(paths.rootPath, paths.buildServerFolder);
-const buildClientPath = path.join(paths.rootPath, paths.buildClientFolder);
+const appPath = path.join(PATHS.rootPath, PATHS.appFolder);
+const buildServerPath = path.join(PATHS.rootPath, PATHS.buildServerFolder);
+const buildClientPath = path.join(PATHS.rootPath, PATHS.buildClientFolder);
 
 function babelTransform(code) {
   return new Promise(function(resolve, reject) {
     babel.transform(
       code,
       {
-        root: paths.rootPath,
-        configFile: './babel.config.server.js',
+        root: PATHS.rootPath,
+        configFile: './' + PATHS.babelConfigServerFile,
         sourceMaps: true,
       },
       function(err, result) {
@@ -71,7 +72,7 @@ const buildServer = wrapBuildStatus('server', async function buildServer(
 function wrapBuildStatus(type, fn) {
   return function(filePath) {
     function cleanBuildStatus() {
-      buildStatus[type][filePath] = null;
+      delete buildStatus[type][filePath];
     }
     return new Promise(function(resolve, reject) {
       if (!buildStatus[type][filePath]) {
@@ -120,7 +121,7 @@ module.exports = {
     const compiler = webpack(await webpackConfig());
     this.handler = e2k(
       createWebpackDevMiddleware(compiler, {
-        publicPath: '/' + paths.serverClientRouter + '/',
+        publicPath: '/' + PATHS.serverClientRouter + '/',
         hot: true,
       })
     );

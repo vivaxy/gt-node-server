@@ -6,7 +6,7 @@ const path = require('path');
 const glob = require('fast-glob');
 const Router = require('@koa/router');
 
-const paths = require('../configs/paths');
+const PATHS = require('../configs/paths');
 const getLogger = require('../lib/get_logger');
 const HTTP_METHODS = require('../configs/http_methods');
 const HTTP_STATUS_CODES = require('../configs/http_status_codes');
@@ -14,7 +14,7 @@ const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 const router = new Router();
 const logger = getLogger('middleware:routers');
 const jsExt = '.js';
-const actionsBase = path.join(paths.rootPath, paths.actionsFolder);
+const actionsBase = path.join(PATHS.rootPath, PATHS.actionsFolder);
 
 function getRelativePath(absolutePath) {
   return '/' + path.relative(actionsBase, absolutePath).slice(0, -3);

@@ -12,7 +12,12 @@ exports.buildServerFolder = 'build_server';
 exports.appFolder = 'app';
 exports.actionsFolder = 'actions';
 exports.viewsFolder = 'views';
+exports.clientFolder = 'client';
+exports.serverFolder = 'server';
 exports.serverClientRouter = '__build';
+
+exports.babelConfigClientFile = 'babel.config.client.js';
+exports.babelConfigServerFile = 'babel.config.server.js';
 
 exports.rootPath = rootPath;
 exports.logFile = path.join(logDirectory, 'default.log');

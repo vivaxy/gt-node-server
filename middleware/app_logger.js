@@ -3,6 +3,7 @@
  * @author vivaxy
  */
 const getLogger = require('../lib/get_logger');
+const NODE_ENV = require('../configs/node_env');
 const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 
 const logger = getLogger('middleware:app_logger');
@@ -59,7 +60,7 @@ module.exports = {
     } catch (ex) {
       const status = HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR;
       ctx.status = status;
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === NODE_ENV.PRODUCTION) {
         ctx.body = http.STATUS_CODES[status];
       } else {
         ctx.body = `<pre>${ex.stack}</pre>`;

@@ -4,6 +4,7 @@
  */
 const path = require('path');
 
+const PATHS = require('../configs/paths');
 const ArgTypes = require('../lib/arg_types');
 const HTTP_METHODS = require('../configs/http_methods');
 const HTTP_STATUS_CODES = require('../configs/http_status_codes');
@@ -25,8 +26,8 @@ module.exports = {
       return;
     }
     const { argTypes, defaultArgs } = require(path.join(
-      '..',
-      'actions',
+      PATHS.rootPath,
+      PATHS.actionsFolder,
       ctx._matchedRoute
     ));
     const args = getArgs(ctx);
