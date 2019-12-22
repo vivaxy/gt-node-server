@@ -6,7 +6,7 @@
   "scripts": {
     "release": "standard-version && git push --follow-tags",
     "build:client": "rm -rf build_client && webpack",
-    "build:server": "rm -rf build_server && babel app -d build_server --config-file ./babel.config.server.js",
+    "build:server": "rm -rf build_server && babel app -d build_server --config-file ./babel.config.server.js --source-maps",
     "build": "yarn build:client && yarn build:server",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node index.js"
@@ -53,6 +53,7 @@
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-transform-require-ignore": "^0.1.1",
     "css-loader": "^3.2.0",
+    "express-to-koa": "^2.0.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.4.3",
     "mini-css-extract-plugin": "^0.8.0",
@@ -61,7 +62,8 @@
     "standard-version": "^7.0.1",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.3",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-middleware": "^3.7.2"
   },
   "lint-staged": {
     "**/**.{js,json,pcss,md}": [

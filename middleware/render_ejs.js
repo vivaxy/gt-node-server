@@ -6,14 +6,15 @@ const path = require('path');
 const fse = require('fs-extra');
 const ejs = require('ejs-stream2');
 
+const PATHS = require('../configs/paths');
+
 const ejsExt = '.ejs';
 const pathToRender = {};
 
 async function getRender(relativePath) {
   const pageRendererFile = path.join(
-    __dirname,
-    '..',
-    'views',
+    PATHS.rootPath,
+    PATHS.viewsFolder,
     relativePath + ejsExt
   );
   const fileExists = await fse.pathExists(pageRendererFile);

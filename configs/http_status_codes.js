@@ -1,3 +1,7 @@
+/**
+ * @since 2019-12-21 07:44
+ * @author vivaxy
+ */
 exports.OK = 200;
 exports.CREATED = 201;
 exports.ACCEPTED = 202;

@@ -10,6 +10,7 @@ const ejs = require('ejs-stream2');
 const compose = require('koa-compose');
 const ReactDOMServer = require('react-dom/server');
 
+const PATHS = require('../configs/paths');
 const HTTP_METHODS = require('../configs/http_methods');
 const HTTP_STATUS_CODES = require('../configs/http_status_codes');
 
@@ -18,9 +19,8 @@ const pathToRender = {};
 
 async function getRender(relativePath) {
   const pageRendererFile = path.join(
-    __dirname,
-    '..',
-    'views',
+    PATHS.rootPath,
+    PATHS.viewsFolder,
     relativePath + ejsExt
   );
   const fileExists = await fse.pathExists(pageRendererFile);
@@ -37,15 +37,15 @@ module.exports = {
   init: async function initRenderReact() {
     // response static files
     const files = await glob('**/*.{js,css}', {
-      cwd: path.join(__dirname, '..', 'build_client'),
+      cwd: path.join(PATHS.rootPath, PATHS.buildClientFolder),
     });
     this.staticFiles = {};
     await files.map(async (file) => {
       const content = await fse.readFile(
-        path.join(__dirname, '..', 'build_client', file),
+        path.join(PATHS.rootPath, PATHS.buildClientFolder, file),
         'utf8'
       );
-      const filename = path.join('__build', file);
+      const filename = path.join(PATHS.serverClientRouter, file);
       this.staticFiles['/' + filename] = content;
     });
   },
@@ -71,7 +71,11 @@ module.exports = {
       ctx.set('Content-Type', 'text/html');
 
       if (ssr) {
-        const app = require(path.join('..', 'build_server', matchedRoute));
+        const app = require(path.join(
+          PATHS.rootPath,
+          PATHS.buildServerFolder,
+          matchedRoute
+        ));
         // fetch server data
         const koaApp = await require('../lib/server');
         const newCtx = koaApp.createContext(
@@ -116,16 +120,16 @@ module.exports = {
         const reactStream = ReactDOMServer.renderToNodeStream(app.default);
         return pathToRender[matchedRoute]({
           ...data,
-          __styles: `<link rel="stylesheet" href="/__build${matchedRoute}.css">`,
-          __scripts: `<script src="/__build${matchedRoute}.js"></script>`,
+          __styles: `<link rel="stylesheet" href="/${PATHS.serverClientRouter}${matchedRoute}.css">`,
+          __scripts: `<script src="/${PATHS.serverClientRouter}${matchedRoute}.js"></script>`,
           __html: reactStream,
           __state: JSON.stringify(app.getState()),
         });
       } else {
         return pathToRender[matchedRoute]({
           ...data,
-          __styles: `<link rel="stylesheet" href="/__build${matchedRoute}.css">`,
-          __scripts: `<script src="/__build${matchedRoute}.js"></script>`,
+          __styles: `<link rel="stylesheet" href="/${PATHS.serverClientRouter}${matchedRoute}.css">`,
+          __scripts: `<script src="/${PATHS.serverClientRouter}${matchedRoute}.js"></script>`,
           __html: '',
           __state: JSON.stringify(null),
         });
