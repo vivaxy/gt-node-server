@@ -32,7 +32,7 @@
     "@koa/router": "^8.0.2",
     "ejs-stream2": "^1.0.2",
     "fast-glob": "^3.1.0",
-    "fs-extra": "^8.0.1",
+    "fs-extra": "^9.0.0",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "koa-compose": "^4.1.0",
