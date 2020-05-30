@@ -29,7 +29,7 @@
   "homepage": "https://github.com/vivaxy/gt-node-server#readme",
   "dependencies": {
     "@babel/runtime": "^7.7.4",
-    "@koa/router": "^8.0.2",
+    "@koa/router": "^9.0.0",
     "ejs-stream2": "^1.0.2",
     "fast-glob": "^3.1.0",
     "fs-extra": "^9.0.0",
