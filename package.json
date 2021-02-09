@@ -9,7 +9,10 @@
     "build:server": "rm -rf build_server && babel app -d build_server --config-file ./babel.config.server.js --source-maps",
     "build": "yarn build:client && yarn build:server",
     "start": "NODE_ENV=production node index.js",
-    "dev": "NODE_ENV=development node index.js"
+    "dev": "NODE_ENV=development node index.js",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "repository": {
     "type": "git",
@@ -54,9 +57,10 @@
     "babel-plugin-transform-require-ignore": "^0.1.1",
     "css-loader": "^5.0.0",
     "express-to-koa": "^2.0.0",
-    "husky": "^4.0.0",
+    "husky": "5",
     "lint-staged": "^10.0.0",
     "mini-css-extract-plugin": "^1.0.0",
+    "pinst": "^2.1.4",
     "prettier": "^2.0.0",
     "react-dom": "^17.0.0",
     "standard-version": "^9.0.0",
@@ -67,13 +71,7 @@
   },
   "lint-staged": {
     "**/**.{js,json,pcss,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }
